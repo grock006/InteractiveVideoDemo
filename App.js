@@ -11,12 +11,64 @@ import {
   Dimensions
 } from 'react-native';
 import Video from 'react-native-video';
+import Orientation from 'react-native-orientation';
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
-const atTimescale = 1000000000;
+
 const mockAPI = [
   {
     activityId: 1,
+    activityType: 'speechActivity',
+    interactive: true,
+    activityStart: 16,
+    interactiveScreenStart: 16,
+    interactiveTargetImageStart: 16,
+    interactiveButtonStart: 16,
+    interactivityStart: 16,
+    countdownClockStart: 16,
+    interactivityDuration: 7,
+    hightlightCorrectAnswerStart: 24,
+    hightlightCorrectAnswerDuration: 3,
+    activityEnd: 27,
+    activityImages: null,
+    correctAnswer: true
+  },
+  {
+    activityId: 2,
+    activityType: 'speechActivity',
+    interactive: true,
+    activityStart: 124,
+    interactiveScreenStart: 124,
+    interactiveTargetImageStart: 124,
+    interactiveButtonStart: 124,
+    interactivityStart: 127,
+    countdownClockStart: 127,
+    interactivityDuration: 10,
+    hightlightCorrectAnswerStart: 136,
+    hightlightCorrectAnswerDuration: 1,
+    activityEnd: 137,
+    activityImages: require('./assets/images/sa/s2_nose.png'),
+    correctAnswer: true
+  },
+  {
+    activityId: 3,
+    activityType: 'speechActivity',
+    interactive: true,
+    activityStart: 138,
+    interactiveScreenStart: 138,
+    interactiveTargetImageStart: 138,
+    interactiveButtonStart: 138,
+    interactivityStart: 143,
+    countdownClockStart: 143,
+    interactivityDuration: 10,
+    hightlightCorrectAnswerStart: 152,
+    hightlightCorrectAnswerDuration: 1,
+    activityEnd: 153,
+    activityImages: require('./assets/images/sa/s2_ears.png'),
+    correctAnswer: true
+  },
+  {
+    activityId: 4,
     activityType: 'trueFalse',
     interactive: true,
     activityStart: 54, //time to start interactive segment within overall video, in seconds
@@ -33,8 +85,67 @@ const mockAPI = [
     hightlightCorrectAnswerDuration: 5, //duration to highlight correct answer
     activityEnd: 72, //time to end all activity screens
     activityTotalDuration: 18, //total time for activity start to finish, everything included
-    assets: [], //image assets, target images, interactive icons, etc.
+    activityImages: require('./assets/images/tf/s1_eyes.png'), //image assets, target images, interactive icons, etc.
     correctAnswer: 'green' //correct answer to the activity question//
+  },
+  {
+    activityId: 5,
+    activityType: 'trueFalse',
+    interactive: true,
+    activityStart: 76,
+    interactiveScreenStart: 76,
+    interactiveTargetImageStart: 76,
+    interactiveButtonStart: 76,
+    interactivityStart: 83,
+    countdownClockStart: 83,
+    interactivityDuration: 5,
+    hightlightCorrectAnswerStart: 89,
+    hightlightCorrectAnswerDuration: 4,
+    activityEnd: 93,
+    activityImages: require('./assets/images/tf/s1_knee.png'),
+    correctAnswer: 'red'
+  },
+  {
+    activityId: 6,
+    activityType: 'multipleChoice',
+    interactive: true,
+    activityStart: 192,
+    interactiveScreenStart: 192,
+    interactiveTargetImageStart: 192,
+    interactivityStart: 195,
+    countdownClockStart: 195,
+    interactivityDuration: 5,
+    hightlightCorrectAnswerStart: 201,
+    hightlightCorrectAnswerDuration: 5,
+    activityEnd: 206,
+    activityImages: [ 
+      require('./assets/images/mc/foot.png'), 
+      require('./assets/images/mc/ear.png'), 
+      require('./assets/images/mc/finger.png'), 
+      require('./assets/images/mc/head.png')
+    ],
+    correctAnswer: 1,
+  },
+  {
+    activityId: 7,
+    activityType: 'multipleChoice',
+    interactive: true,
+    activityStart: 207,
+    interactiveScreenStart: 207,
+    interactiveTargetImageStart: 207,
+    interactivityStart: 209,
+    countdownClockStart: 209,
+    interactivityDuration: 5,
+    hightlightCorrectAnswerStart: 216,
+    hightlightCorrectAnswerDuration: 2,
+    activityEnd: 218,
+    activityImages: [ 
+      require('./assets/images/mc/body.png'), 
+      require('./assets/images/mc/finger.png'), 
+      require('./assets/images/mc/feet.png'), 
+      require('./assets/images/mc/hand.png')
+    ],
+    correctAnswer: 3,
   }
 ];
 
@@ -51,23 +162,34 @@ export default class App extends Component<Props> {
        countdownClockSeconds: null,
        isVideoLoaded: false,
        isPaused: this.t,
-       isMuted: true,
-       playbackInstancePosition: null,
-       playbackInstanceDuration: null,
-       interactiveContainer: false,
+       isMuted: false,
+       interactiveContainer: true,
        trueFalse: false,
        trueFalseImageContainer: false,
        trueFalseButtonsContainer: false,
        trueFalseSelected: null,
        trueFalseCorrect: false,
+       trueFalseCheckmark: false, 
        trueFalseCorrectAnswer: null,
-       speechActivity: false,
+       trueFalseImage: null,
+       speechActivity: true,
+       speechActivityImageContainer: true,
+       speechActivityButtonsContainer: true,
+       speechActivityCorrectAnswer: false,
+       speechActivityImage: null,
        multipleChoice: false,
        multipleChoiceAnswer: null,
        multipleChoiceSelected: null,
+       multipleChoiceImages: [],
+       multipleChoiceCheckmark: false,
+       multipleChoiceCorrectAnswer: null,
        countdownClock: false,
        resultsScreen: false
      }
+  }
+
+  componentDidMount() {
+    Orientation.lockToLandscape()
   }
 
   countdownClock() {
@@ -89,7 +211,32 @@ export default class App extends Component<Props> {
         trueFalse: false,
         trueFalseImageContainer: false,
         trueFalseButtonsContainer: false,
-        trueFalseCorrect: false
+        trueFalseSelected: null,
+        trueFalseCorrect: false,
+        trueFalseCheckmark: false, 
+        trueFalseCorrectAnswer: null,
+        trueFalseImage: null,
+      });
+    }
+    if (activityType === 'multipleChoice') {
+      this.setState({
+        interactiveContainer: false,
+        multipleChoice: false,
+        multipleChoiceAnswer: null,
+        multipleChoiceSelected: null,
+        multipleChoiceImages: [],
+        multipleChoiceCheckmark: false,
+        multipleChoiceCorrectAnswer: null,
+      });
+    }
+    if (activityType === 'speechActivity') {
+      this.setState({
+        interactiveContainer: false,
+        speechActivity: false,
+        speechActivityImageContainer: false,
+        speechActivityButtonsContainer: false,
+        speechActivityImage: null,
+        speechActivityCorrectAnswer: false,
       });
     }
   };
@@ -102,13 +249,34 @@ export default class App extends Component<Props> {
       if (correctAnswer === this.state.trueFalseSelected) {
         this.incrementTicketCounter();
       }
-    } 
+    }
+    if (activityType === 'multipleChoice') {
+      this.setState({
+        multipleChoiceCorrectAnswer: correctAnswer
+      })
+      if (correctAnswer === this.state.multipleChoiceSelected) {
+        this.incrementTicketCounter();
+      }
+    }
+    if (activityType === 'speechActivity') {
+      this.setState({
+        speechActivityCorrectAnswer: true
+      })
+      if (correctAnswer) {
+        //this.incrementTicketCounter();
+      }
+    }    
   }
 
   _setHighlightCorrectAnswer = (boolean, activityType) => {
     if (activityType === 'trueFalse') {
       this.setState({
         trueFalseCheckmark: boolean
+      });
+    }
+    if (activityType === 'multipleChoice') {
+      this.setState({
+        multipleChoiceCheckmark: boolean
       });
     }
   };
@@ -131,12 +299,27 @@ export default class App extends Component<Props> {
     });
   };
 
-  _setInteractiveTargetImageDisplay = (boolean, activityType) => {
+  _setInteractiveTargetImageDisplay = (boolean, activityType, activityImages) => {
     if (activityType === 'trueFalse') {
       this.setState({
-        trueFalseImageContainer: boolean
+        trueFalseImageContainer: boolean,
+        trueFalseImage: activityImages
       });
     }
+    if (activityType === 'multipleChoice') {
+      this.setState({
+        multipleChoice: boolean,
+        multipleChoiceImages: activityImages
+      });
+    }
+    if (activityType === 'speechActivity') {
+      this.setState({
+        speechActivity: boolean,
+        speechActivityImageContainer: boolean,
+        speechActivityImage: activityImages
+      });
+    }
+
   };
 
   _setInteractiveTargetButtonsDisplay = (boolean, activityType) => {
@@ -145,25 +328,9 @@ export default class App extends Component<Props> {
         trueFalseButtonsContainer: boolean
       });
     }
-  };
-
-  _setActivityType = (activityType) => {
-    if (activityType === 'trueFalse') {
+    if(activityType === 'speechActivity') {
       this.setState({
-        trueFalse: true
-      });
-    }
-    if (activityType === 'multipleChoice') {
-      this.setState({
-        trueFalse: false,
-        multipleChoice: true
-      });
-    }
-    if (activityType === 'speechActivity') {
-      this.setState({
-        trueFalse: false,
-        multipleChoice: false,
-        speechActivity: true
+        speechActivityButtonsContainer: boolean
       });
     }
   };
@@ -173,6 +340,26 @@ export default class App extends Component<Props> {
       trueFalseSelected: answer
     });
   };
+
+  _onPressSpeechRecognition = () => {
+    //alert('wassup')
+    fetch('https://www.abcmouse.com/apis/sws/0.1/json/Resource/Enumerate/init', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        firstParam: 'yourValue',
+        secondParam: 'yourOtherValue',
+      }),
+    }).then((response) => {
+      console.log(response)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
 
   _onPressMultipleChoice = (answer) => {
     this.setState({
@@ -184,17 +371,54 @@ export default class App extends Component<Props> {
     this.setState({
       isVideoLoaded: true
     });
+    this.player.seek(54);
   };
 
+    _onPressReloadVideo = () => {
+    if(this.player !== null) {
+      this.player.seek(0);
+      this.setState({
+        ticketCounter: 0,
+        countdownClockSeconds: null,
+        isVideoLoaded: false,
+        isPaused: false,
+        isMuted: false,
+        interactiveContainer: false,
+        trueFalse: false,
+        trueFalseImageContainer: false,
+        trueFalseButtonsContainer: false,
+        trueFalseSelected: null,
+        trueFalseCorrect: false,
+        trueFalseCheckmark: false, 
+        trueFalseCorrectAnswer: null,
+        trueFalseImage: null,
+        speechActivity: false,
+        speechActivityImageContainer: false,
+        speechActivityButtonsContainer: false,
+        speechActivityCorrectAnswer: false,
+        speechActivityImage: null,
+        multipleChoice: false,
+        multipleChoiceAnswer: null,
+        multipleChoiceSelected: null,
+        multipleChoiceImages: [],
+        multipleChoiceCheckmark: false,
+        multipleChoiceCorrectAnswer: null,
+        countdownClock: false,
+        resultsScreen: false
+      });
+    }
+  }
+
   _onVideoProgress = (status) => {
+    //console.log(status.currentTime)
     if (this.state.isVideoLoaded) {
-      this._playInteractiveSequence(status)
+      //this._playInteractiveSequence(status)
     }
   }
 
   _onVideoMount = component => {
     this._video = component;
-    this.playbackInstance = this._video;
+    this.player = this._video;
   }
 
   _playInteractiveSequence = (status) => {
@@ -215,7 +439,7 @@ export default class App extends Component<Props> {
         //interactiveTargetImageStart: 5, //time to display activity target image or images
         if (Math.round(status.currentTime) === mockAPI.interactiveTargetImageStart ) {
           //console.log('Math.round(status.currentTime)', Math.round(status.currentTime), 'mockAPI.interactiveTargetImageStart ', mockAPI.interactiveTargetImageStart )
-          this._setInteractiveTargetImageDisplay(true, mockAPI.activityType);
+          this._setInteractiveTargetImageDisplay(true, mockAPI.activityType, mockAPI.activityImages);
         }
 
         // interactiveButtonStart: 7, //time to display interactive buttons, non-clickable, could also be microphone
@@ -307,7 +531,7 @@ export default class App extends Component<Props> {
           <View style={styles.reloadContainer}>
             <TouchableOpacity 
               onPress={() => this._onPressReloadVideo()}>
-
+              <Image style={styles.reloadIcon} source={require('./assets/images/refresh.png')} />
             </TouchableOpacity>
           </View>
           <Video
@@ -315,11 +539,11 @@ export default class App extends Component<Props> {
             controls={true}
             rate={1.0}
             volume={1.0}
-            paused={true}
+            paused={this.state.isPaused}
             muted={this.state.isMuted}
             onLoad={this._onVideoLoad}
             onProgress={this._onVideoProgress}
-            style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}
+            style={[styles.video, { width: DEVICE_WIDTH, height: DEVICE_HEIGHT }]}
             source={{ uri: 'https://s3-us-west-1.amazonaws.com/gr-video-assets/180302_Wordplay_Demo_v1.mp4' }}
           />
 
@@ -340,7 +564,7 @@ export default class App extends Component<Props> {
 
               {this.state.trueFalseImageContainer && 
                 <View style={styles.trueFalseImageContainer}>
-                    <Image style={styles.trueFalseImage} source={require('./assets/images/tf_s1_eyes.png')} />
+                    <Image style={styles.trueFalseImage} source={this.state.trueFalseImage} />
                 </View>
               }
               {this.state.trueFalseButtonsContainer && <View style={styles.trueFalseButtonsContainer}>
@@ -350,11 +574,11 @@ export default class App extends Component<Props> {
                   ]}>
                   <TouchableOpacity 
                     onPress={() => this._onPressTrueFalse('green')}
-                    disabled={Boolean(this.state.trueFalseSelected)}
+                    disabled={Boolean(this.state.trueFalseSelected) || !this.state.countdownClock}
                     style={styles.trueFalseGreenYesButton}>
                       {this.state.trueFalseCheckmark && (this.state.trueFalseCorrectAnswer === 'green') &&
                         <View style={styles.trueFalseCheckmarkContainer}>
-
+                          <Image source={require('./assets/images/checkmark.png')} />
                         </View>
                       }
                   </TouchableOpacity>
@@ -366,12 +590,12 @@ export default class App extends Component<Props> {
                   ]}>
                   <TouchableOpacity 
                     onPress={() => this._onPressTrueFalse('red')}
-                    disabled={Boolean(this.state.trueFalseSelected)}
+                    disabled={Boolean(this.state.trueFalseSelected) || !this.state.countdownClock}
                     style={styles.trueFalseRedNoButton}
                     >
                     {this.state.trueFalseCheckmark && (this.state.trueFalseCorrectAnswer === 'red') &&
                       <View style={styles.trueFalseCheckmarkContainer}>
-
+                        <Image source={require('./assets/images/checkmark.png')} />
                       </View>
                     }
                   </TouchableOpacity>
@@ -380,47 +604,105 @@ export default class App extends Component<Props> {
 
               </View>}
 
-              {this.state.speechActivity && <View style={styles.speechActivityContainer}>
-                <View style={styles.speechActivityImageContainer}></View>
-                <View style={styles.speechActivityMicrophoneContainer}></View>
-              </View>}
+
+
+
+
+              {this.state.speechActivity && 
+                <View style={styles.speechActivityContainer}>
+              
+                {this.state.speechActivityImageContainer && 
+                  <View style={styles.speechActivityImageContainer}>
+                    <Image style={styles.speechActivityImage} source={this.state.speechActivityImage} />
+                  </View>
+                }
+
+                {this.state.speechActivityButtonsContainer &&
+                  <TouchableOpacity onPress={() => this._onPressSpeechRecognition()}>>
+                    <View style={styles.speechActivityIconContainer}>
+                      {!this.state.speechActivityCorrectAnswer &&
+                        <Image style={styles.speechActivityIcon} source={require('./assets/images/microphone.png')} />
+                      }
+                      {this.state.speechActivityCorrectAnswer &&
+                        <Image style={styles.speechActivityIcon} source={require('./assets/images/star.png')} />
+                      }
+                    </View>
+                  </TouchableOpacity>
+                }
+              
+              </View>
+            }
+
+
+
+
+
+
+
               
               {this.state.multipleChoice && 
                 <View style={styles.multipleChoiceContainer}>
                   <TouchableOpacity
-                    disabled={Boolean(this.state.multipleChoiceSelected)}
+                    disabled={Boolean(this.state.multipleChoiceSelected) || !this.state.countdownClock}    
                     onPress={() => this._onPressMultipleChoice(1)}>
                     <View style={[styles.multipleChoiceImageContainer,
-                      this.state.multipleChoiceSelected === 1 ? styles.multipleChoiceImageContainerSelected : {}
+                      this.state.multipleChoiceSelected === 1 ? styles.multipleChoiceImageContainerSelected : {},
+                      (this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 1)) ? styles.multipleChoiceImageContainerCorrect : {}
                       ]}>
+                      <Image style={styles.multipleChoiceImage} source={this.state.multipleChoiceImages[0]}  />
+                      { this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 1) &&
+                        <View style={styles.multipleChoiceCheckmarkContainer}>
+                          <Image source={require('./assets/images/green_circle_checkmark.png')} />
+                        </View>
+                      }
                     </View>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    disabled={Boolean(this.state.multipleChoiceSelected)}
+                    disabled={Boolean(this.state.multipleChoiceSelected) || !this.state.countdownClock}
                     onPress={() => this._onPressMultipleChoice(2)}>
                     <View style={[styles.multipleChoiceImageContainer,
-                       this.state.multipleChoiceSelected === 2 ? styles.multipleChoiceImageContainerSelected : {}
+                       this.state.multipleChoiceSelected === 2 ? styles.multipleChoiceImageContainerSelected : {},
+                       (this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 2)) ? styles.multipleChoiceImageContainerCorrect : {}
                       ]}>
+                      <Image style={styles.multipleChoiceImage} source={this.state.multipleChoiceImages[1]}   />
+                      { this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 2) &&
+                        <View style={styles.multipleChoiceCheckmarkContainer}>
+                          <Image source={require('./assets/images/green_circle_checkmark.png')} />
+                        </View>
+                      }
                     </View>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    disabled={Boolean(this.state.multipleChoiceSelected)}
+                    disabled={Boolean(this.state.multipleChoiceSelected) || !this.state.countdownClock}
                     onPress={() => this._onPressMultipleChoice(3)}>              
                     <View style={[styles.multipleChoiceImageContainer,
-                      this.state.multipleChoiceSelected === 3 ? styles.multipleChoiceImageContainerSelected : {}
+                      this.state.multipleChoiceSelected === 3 ? styles.multipleChoiceImageContainerSelected : {},
+                      (this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 3)) ? styles.multipleChoiceImageContainerCorrect : {}
                       ]}>
+                      <Image style={styles.multipleChoiceImage} source={this.state.multipleChoiceImages[2]}   />
+                      { this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 3) &&
+                        <View style={styles.multipleChoiceCheckmarkContainer}>
+                          <Image source={require('./assets/images/green_circle_checkmark.png')} />
+                        </View>
+                      }
                     </View>
-                  </TouchableOpacity>
+                  </TouchableOpacity>                  
                   <TouchableOpacity
-                    disabled={Boolean(this.state.multipleChoiceSelected)}
+                    disabled={Boolean(this.state.multipleChoiceSelected) || !this.state.countdownClock}
                     onPress={() => this._onPressMultipleChoice(4)}>
                     <View style={[styles.multipleChoiceImageContainer,
-                      this.state.multipleChoiceSelected === 4 ? styles.multipleChoiceImageContainerSelected : {}
+                      this.state.multipleChoiceSelected === 4 ? styles.multipleChoiceImageContainerSelected : {},
+                      (this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 4)) ? styles.multipleChoiceImageContainerCorrect : {}
                       ]}>
+                      <Image style={styles.multipleChoiceImage} source={this.state.multipleChoiceImages[3]}   />
+                      { this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 4) &&
+                        <View style={styles.multipleChoiceCheckmarkContainer}>
+                          <Image source={require('./assets/images/green_circle_checkmark.png')} />
+                        </View>
+                      }
                     </View>
                   </TouchableOpacity>
-                </View>}
-          
+                </View>}         
             </View>}
 
           {this.state.resultsScreen &&
@@ -436,22 +718,6 @@ export default class App extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
   safeArea: {
     flex: 1,
     backgroundColor: '#000000'
@@ -461,13 +727,24 @@ const styles = StyleSheet.create({
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
     backgroundColor: '#000000',
-    justifyContent: 'center'
+    position: 'relative'
+  },
+  video: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0
   },
   reloadContainer: {
     position: 'absolute',
     top: 5,
     left: 5,
     zIndex: 10
+  },
+  reloadIcon: {
+    height: 35,
+    width: 35
   },
   ticketContainer: {
     flexDirection: 'row',
@@ -555,7 +832,7 @@ const styles = StyleSheet.create({
     right: 15, 
     backgroundColor: 'rgba(213, 221, 234, 0.5)',
     height: 290,
-    width: 400,
+    width: 350,
     borderWidth: 1,
     borderColor: '#898989',
     borderRadius: 15,
@@ -570,12 +847,12 @@ const styles = StyleSheet.create({
     borderColor: '#898989',
     borderRadius: 15,
     backgroundColor: '#ffffff',
+    justifyContent: 'center'
   },
   trueFalseImage: {
     alignSelf: 'center',
-    marginTop: 10,
-    width: 150, 
-    height: 150
+    width: 135, 
+    height: 135
   },
   trueFalseButtonsContainer: {
     flexDirection: 'row',
@@ -584,9 +861,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   trueFalseCheckmarkContainer: {
-    top: -20,
-    alignSelf: 'center',
-    position: 'absolute'
   },
   trueFalseRedNoButton: {
     height: 75,
@@ -596,7 +870,9 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderWidth: 10,
     zIndex: 5,
-    position: 'absolute'
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   trueFalseRedNoButtonHighlight: {
     borderColor: 'rgba(195, 0, 22, 0.0)',
@@ -624,6 +900,8 @@ const styles = StyleSheet.create({
     borderWidth: 10,
     zIndex: 5,
     position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   trueFalseGreenYesButtonHighlight: {
     borderColor: 'transparent',
@@ -645,46 +923,70 @@ const styles = StyleSheet.create({
   speechActivityImageContainer: {
     zIndex: 3,
     position: 'relative',
-    height: 125,
-    width: 175,
-    marginTop: 25,
-    borderWidth: 5,
-    borderColor: '#3C7BDA',
+    height: 150,
+    width: 160,
+    marginTop: 15,
+    borderWidth: 2,
+    borderColor: '#898989',
     borderRadius: 15,
     backgroundColor: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  speechActivityMicrophoneContainer: {
-    width: 50,
-    height: 100,
-    borderColor: '#3C7BDA',
-    borderWidth: 1,
+  speechActivityImage: {
+    height: 125,
+    width: 125,
+    alignSelf: 'center'
+  },
+  speechActivityIconContainer: {
     alignSelf: 'center',
-    marginTop: 10,
-    zIndex: 3,
-    backgroundColor: '#ffffff'
+    marginTop: 15,
+    zIndex: 3
+  },
+  speechActivityIcon: {
+    width: 90,
+    height: 90
   },
   multipleChoiceContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingTop: 5,
-    paddingBottom: 5
+    marginTop: 5,
+    marginBottom: 5,
+    marginRight: 5,
+    marginLeft: 5
   },
   multipleChoiceImageContainer: {
     zIndex: 3,
     position: 'relative',
-    height: 120,
-    width: 180,
-    borderWidth: 5,
-    borderColor: 'rgba(60, 123, 218, 0.7)',
+    height: 130,
+    width: 160,
+    borderWidth: 2,
+    borderColor: '#898989',
     borderRadius: 15,
     backgroundColor: '#ffffff',
     marginTop: 5,
-    marginBottom: 5
+    marginBottom: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  multipleChoiceCheckmarkContainer: {
+    position: 'absolute',
+    top: 5,
+    left: 5
   },
   multipleChoiceImageContainerSelected: {
     borderWidth: 10, 
-    borderColor: '#1B53B1'
+    borderColor: 'rgb(242, 157, 48)'
+  },
+  multipleChoiceImageContainerCorrect: {
+    borderWidth: 10, 
+    borderColor: '#48AA09'
+  },
+  multipleChoiceImage: {
+    alignSelf: 'center',
+    height: 115,
+    width: 115
   }
 });
