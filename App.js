@@ -8,31 +8,17 @@ import {
   Image, 
   SafeAreaView, 
   TouchableOpacity, 
-  Dimensions
+  Dimensions,
+  Animated,
+  Easing
 } from 'react-native';
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation';
+import {AudioRecorder, AudioUtils} from 'react-native-audio';
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 
 const mockAPI = [
-  {
-    activityId: 1,
-    activityType: 'speechActivity',
-    interactive: true,
-    activityStart: 16,
-    interactiveScreenStart: 16,
-    interactiveTargetImageStart: 16,
-    interactiveButtonStart: 16,
-    interactivityStart: 16,
-    countdownClockStart: 16,
-    interactivityDuration: 7,
-    hightlightCorrectAnswerStart: 24,
-    hightlightCorrectAnswerDuration: 3,
-    activityEnd: 27,
-    activityImages: null,
-    correctAnswer: true
-  },
   {
     activityId: 2,
     activityType: 'speechActivity',
@@ -41,14 +27,16 @@ const mockAPI = [
     interactiveScreenStart: 124,
     interactiveTargetImageStart: 124,
     interactiveButtonStart: 124,
-    interactivityStart: 127,
+    interactivityStart: 127, //start speech recording //set highlight class (animation later)
     countdownClockStart: 127,
-    interactivityDuration: 10,
-    hightlightCorrectAnswerStart: 136,
-    hightlightCorrectAnswerDuration: 1,
+    interactivityDuration: 2, //stop speech recording //remove highlight class
+    interactivityAnimationDuration: 7,
+    hightlightCorrectAnswerStart: 134,
+    hightlightCorrectAnswerDuration: 3,
     activityEnd: 137,
     activityImages: require('./assets/images/sa/s2_nose.png'),
-    correctAnswer: true
+    correctAnswer: 'this is a nose',
+    pcmFileName: 'nose'
   },
   {
     activityId: 3,
@@ -60,12 +48,14 @@ const mockAPI = [
     interactiveButtonStart: 138,
     interactivityStart: 143,
     countdownClockStart: 143,
-    interactivityDuration: 10,
-    hightlightCorrectAnswerStart: 152,
-    hightlightCorrectAnswerDuration: 1,
+    interactivityDuration: 2,
+    interactivityAnimationDuration: 7,
+    hightlightCorrectAnswerStart: 150,
+    hightlightCorrectAnswerDuration: 3,
     activityEnd: 153,
     activityImages: require('./assets/images/sa/s2_ears.png'),
-    correctAnswer: true
+    correctAnswer: 'these are ears',
+    pcmFileName: 'ears'
   },
   {
     activityId: 4,
@@ -153,17 +143,16 @@ type Props = {};
 export default class App extends Component<Props> {
   constructor(props) {
     super(props);
-     this.interactionTimeout = null;
      this.t = true;
      this.f = false;
-     this.playbackInstance = null;
      this.state = {
        ticketCounter: 0,
+       countdownClock: false,
        countdownClockSeconds: null,
        isVideoLoaded: false,
        isPaused: this.t,
-       isMuted: false,
-       interactiveContainer: true,
+       isMuted: this.f,
+       interactiveContainer: false,
        trueFalse: false,
        trueFalseImageContainer: false,
        trueFalseButtonsContainer: false,
@@ -172,37 +161,50 @@ export default class App extends Component<Props> {
        trueFalseCheckmark: false, 
        trueFalseCorrectAnswer: null,
        trueFalseImage: null,
-       speechActivity: true,
-       speechActivityImageContainer: true,
-       speechActivityButtonsContainer: true,
+       speechActivity: false,
+       speechActivityImageContainer: false,
+       speechActivityButtonsContainer: false,
        speechActivityCorrectAnswer: false,
+       speechActivityIncorrectAnswer: false,
+       speechActivityCheckmark: false,
        speechActivityImage: null,
+       speechActivityRecording: true,
+       speechActivityProcessing: false,
+       speechActivityAudioPath: null,
+       speechActivityScore: null,
+       speechActivityProcessingAnim: new Animated.Value(0),
+       speechActivityRecordingAnim: new Animated.Value(0),
        multipleChoice: false,
        multipleChoiceAnswer: null,
        multipleChoiceSelected: null,
        multipleChoiceImages: [],
        multipleChoiceCheckmark: false,
        multipleChoiceCorrectAnswer: null,
-       countdownClock: false,
        resultsScreen: false
      }
   }
 
   componentDidMount() {
-    Orientation.lockToLandscape()
-  }
+    //this.animateSpeechActivityProcessing(5)
+    //this.animateSpeechActivityRecording(5);
+    Orientation.lockToLandscape();
+
+    AudioRecorder.onFinished = (data) => {
+      this._finishRecording(data.status === "OK", data.audioFileURL);
+    };
+  };
 
   countdownClock() {
     this.setState(prevState => ({
       countdownClockSeconds: prevState.countdownClockSeconds - 1
     }));
-  }
+  };
 
   incrementTicketCounter() {
     this.setState(prevState => ({
       ticketCounter: prevState.ticketCounter + 1
     }));
-  }
+  };
 
   _setActivityEnd = (activityType) => {
     if (activityType === 'trueFalse') {
@@ -235,8 +237,14 @@ export default class App extends Component<Props> {
         speechActivity: false,
         speechActivityImageContainer: false,
         speechActivityButtonsContainer: false,
-        speechActivityImage: null,
         speechActivityCorrectAnswer: false,
+        speechActivityIncorrectAnswer: false,
+        speechActivityImage: null,
+        speechActivityRecording: false,
+        speechActivityProcessing: false,
+        speechActivityAudioPath: null,
+        speechActivityScore: null,
+        speechActivityCheckmark: false
       });
     }
   };
@@ -245,7 +253,7 @@ export default class App extends Component<Props> {
     if (activityType === 'trueFalse') {
       this.setState({
         trueFalseCorrectAnswer: correctAnswer
-      })
+      });
       if (correctAnswer === this.state.trueFalseSelected) {
         this.incrementTicketCounter();
       }
@@ -253,19 +261,28 @@ export default class App extends Component<Props> {
     if (activityType === 'multipleChoice') {
       this.setState({
         multipleChoiceCorrectAnswer: correctAnswer
-      })
+      });
       if (correctAnswer === this.state.multipleChoiceSelected) {
         this.incrementTicketCounter();
       }
-    }
-    if (activityType === 'speechActivity') {
+    } 
+  };
+
+  _checkSpeechActivityAnswer = (speechScore) => {
+    //console.log('speechScore', speechScore, typeof speechScore)
+    //console.log('parseInt(speechScore, 10) >= 0.5', parseInt(speechScore, 10) >= 0.5)
+    //console.log('parseInt(speechScore, 10)', parseInt(speechScore, 10))
+    if (parseFloat(speechScore, 10) >= 0.5) {
+      //console.log('incrementTicketCounter-----')
       this.setState({
         speechActivityCorrectAnswer: true
-      })
-      if (correctAnswer) {
-        //this.incrementTicketCounter();
-      }
-    }    
+      });
+      this.incrementTicketCounter();
+    } else {
+      this.setState({
+        speechActivityIncorrectAnswer: true
+      });
+    }
   }
 
   _setHighlightCorrectAnswer = (boolean, activityType) => {
@@ -341,23 +358,150 @@ export default class App extends Component<Props> {
     });
   };
 
-  _onPressSpeechRecognition = () => {
-    //alert('wassup')
-    fetch('https://www.abcmouse.com/apis/sws/0.1/json/Resource/Enumerate/init', {
+  _startInteractivity = (apiObject) => {
+    if (apiObject.activityType === 'speechActivity') {
+      console.log('start interactivity')
+      var uniqId = Date.now();
+      var uniqAudioPath = AudioUtils.DocumentDirectoryPath + '/' + apiObject.pcmFileName + '-' + uniqId + '.lpcm';
+      console.log('AudioUtils.DocumentDirectoryPath', AudioUtils.DocumentDirectoryPath)
+      console.log('uniqAudioPath', uniqAudioPath)
+      this.setState({
+        speechActivityAudioPath: uniqAudioPath
+      });
+      this._startSpeechActivityRecording(uniqAudioPath, apiObject);
+    }
+  };
+
+  _stopInteractivity = (apiObject) => {
+    if(apiObject.activityType === 'speechActivity') {
+      this._stopSpeechActivityRecording()
+        .then((response) => 
+          this._speechActivityAPIRequest(apiObject)
+        )
+    }
+  }
+
+  _prepareRecordingPath = (audioPath) => {
+    console.log('_prepareRecordingPath audioPath', audioPath)
+    AudioRecorder.prepareRecordingAtPath(audioPath, {
+      SampleRate: 22050,
+      Channels: 1,
+      AudioQuality: "Low",
+      AudioEncoding: "lpcm",
+      AudioEncodingBitRate: 32000
+    });
+  }
+
+  _finishRecording(didSucceed) {
+    this.setState({ speechActivityRecordingFinished: didSucceed });
+  }
+
+  animateSpeechActivityProcessing = (iterations) => {
+    console.log('iterations', iterations)
+    console.log('this.state.speechActivityRecording', this.state.speechActivityRecording)
+    //if (this.state.speechActivityRecording) {
+      this.state.speechActivityProcessingAnim.setValue(1)
+      Animated.timing(                  
+        this.state.speechActivityProcessingAnim,            
+        {
+          toValue: 0,                   
+          duration: 1000,  
+          iterations: iterations,
+          useNativeDriver: true,
+          easing: Easing.linear
+        }
+      ).start((animation) => {
+        if (animation.finished) {
+          this.animateSpeechActivityProcessing();
+        }
+      }); 
+    //}
+  }
+
+  animateSpeechActivityRecording = (iterations) => {
+    this.state.speechActivityRecordingAnim.setValue(0)
+    Animated.timing(
+      this.state.speechActivityRecordingAnim,
+      {
+        toValue: 1,
+        duration: 1000,
+        iterations: iterations,
+        useNativeDriver: true,
+        easing: Easing.linear
+      }
+    ).start((animation) => {
+        if (animation.finished) {
+          this.animateSpeechActivityRecording();
+        }
+      })
+  }
+
+  async _startSpeechActivityRecording(speechActivityAudioPath, apiObject) {
+    //if (!this.state.speechActivityRecording) {
+      console.log('_startSpeechActivityRecording')
+      this._prepareRecordingPath(speechActivityAudioPath)
+      this.setState({
+        speechActivityRecording: true
+      });
+      this.animateSpeechActivityRecording(apiObject.interactivityAnimationDuration)
+      
+      try {
+        const filePath = await AudioRecorder.startRecording();
+      } catch (error) {
+        console.log(error);
+      }
+    //}
+  }
+
+  async _stopSpeechActivityRecording() {
+    try {
+      const filePath = await AudioRecorder.stopRecording();
+      this.setState({
+        speechActivityRecording: false,
+      });
+      return filePath;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async _speechActivityAPIRequest(apiObject) {
+    let apiUrl = 'http://admin.abcmouseforschools.com/http/VoiceScoreIndex';
+    let path =  this.state.speechActivityAudioPath 
+    let formData = new FormData();
+    //console.log('this.state.speechActivityAudioPath', this.state.speechActivityAudioPath)
+    formData.append('file', { 
+      uri: path,
+      name: apiObject.pcmFileName,
+      type: 'audio/wav'
+    })
+    formData.append('ref_text', apiObject.correctAnswer)
+    //console.log('formData', formData)
+
+    this.setState({
+      speechActivityProcessing: true
+    });
+    this.animateSpeechActivityProcessing(5);
+    fetch(apiUrl, {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
       },
-      body: JSON.stringify({
-        firstParam: 'yourValue',
-        secondParam: 'yourOtherValue',
-      }),
-    }).then((response) => {
-      console.log(response)
+      body: formData
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson)
+      this.setState({
+        speechActivityScore: responseJson.score,
+        speechActivityProcessing: false
+      })
+      this._checkSpeechActivityAnswer(this.state.speechActivityScore, 'speechActivity')
     })
     .catch((error) => {
       console.log(error)
+      this._checkSpeechActivityAnswer('0', 'speechActivity')
     })
   }
 
@@ -371,7 +515,7 @@ export default class App extends Component<Props> {
     this.setState({
       isVideoLoaded: true
     });
-    this.player.seek(54);
+    this.player.seek(122);
   };
 
     _onPressReloadVideo = () => {
@@ -396,7 +540,12 @@ export default class App extends Component<Props> {
         speechActivityImageContainer: false,
         speechActivityButtonsContainer: false,
         speechActivityCorrectAnswer: false,
+        speechActivityCheckmark: false,
         speechActivityImage: null,
+        speechActivityRecording: false,
+        speechActivityAudioPath: null,
+        speechActivityScore: null,
+        speechActivityProcessingAnim: new Animated.Value(1),
         multipleChoice: false,
         multipleChoiceAnswer: null,
         multipleChoiceSelected: null,
@@ -410,16 +559,15 @@ export default class App extends Component<Props> {
   }
 
   _onVideoProgress = (status) => {
-    //console.log(status.currentTime)
     if (this.state.isVideoLoaded) {
-      //this._playInteractiveSequence(status)
+      this._playInteractiveSequence(status)
     }
-  }
+  };
 
   _onVideoMount = component => {
     this._video = component;
     this.player = this._video;
-  }
+  };
 
   _playInteractiveSequence = (status) => {
     if (status && mockAPI) {
@@ -427,18 +575,12 @@ export default class App extends Component<Props> {
       mockAPI.forEach((mockAPI) => {
         // activityStart: 3, //time to start interactive segment within overall video, in seconds
         // interactiveScreenStart: 3, //time to display interactive screen
-        // activityType: 'trueFalse',
-        // interactive: true,
-        //console.log('status.currentTime', status.currentTime, atTimescale)
-        //console.log('Math.round(status.currentTime)', Math.round(status.currentTime))
-        //console.log('mockAPI.activityStart', mockAPI.activityStart)
         if (Math.round(status.currentTime) === mockAPI.activityStart ) {
           this._setInteractiveContainerDisplay(true);
         }
 
         //interactiveTargetImageStart: 5, //time to display activity target image or images
         if (Math.round(status.currentTime) === mockAPI.interactiveTargetImageStart ) {
-          //console.log('Math.round(status.currentTime)', Math.round(status.currentTime), 'mockAPI.interactiveTargetImageStart ', mockAPI.interactiveTargetImageStart )
           this._setInteractiveTargetImageDisplay(true, mockAPI.activityType, mockAPI.activityImages);
         }
 
@@ -469,21 +611,19 @@ export default class App extends Component<Props> {
           );
         }
         
-        // buttons are gray and disabled before this
-        // this.state.trueFalseDisabled
-        // styles.trueFalseDisabled
-        // needs to be set depending on activityType
         // interactivityStart: 10, //time to allow user interactivity, start countdown clock 
         // countdownClockStart: 10, //time to display clock countdown, should be same as interactivityStart
         // interactivityDuration: 5, //total time for user interactivity, can use instead of countdown duration
         if (Math.round(status.currentTime) === mockAPI.interactivityStart ) {
           this._setCountdownClockDisplay(true);
-          this._setCountdownClockSeconds(mockAPI.interactivityDuration)
+          this._setCountdownClockSeconds(mockAPI.interactivityDuration);
+          this._startInteractivity(mockAPI);
           this.countdownClockInterval = setInterval(
             () => {
               this.countdownClock()
               if(this.state.countdownClockSeconds < 0) {
                 clearInterval(this.countdownClockInterval);
+                this._stopInteractivity(mockAPI);
                 this._setCountdownClockDisplay(false);
               }
             }, 1000
@@ -493,11 +633,7 @@ export default class App extends Component<Props> {
         // hightlightCorrectAnswerStart: 15, //time to highlight correct answer
         // hightlightCorrectAnswerDuration: 3, //duration to highlight correct answer
         // check correctAnswer: 'red' //correct answer to the activity question
-        // Tickercounter increments if correct
         if (Math.round(status.currentTime) === mockAPI.hightlightCorrectAnswerStart ) {
-          //running twice
-          //console.log('Math.round(status.positionMillis / 1000', Math.round(status.currentTime));
-          //console.log('mockAPI.hightlightCorrectAnswerStart', mockAPI.hightlightCorrectAnswerStart);
           this._checkAnswer(mockAPI.correctAnswer, mockAPI.activityType);
           this._setHighlightCorrectAnswer(true, mockAPI.activityType);
           this.highlightCorrectAnswerTimeout = setTimeout(
@@ -513,13 +649,9 @@ export default class App extends Component<Props> {
           clearTimeout(this.highlightCorrectAnswerTimeout);
           clearTimeout(this.greenButtonHighlightTimeout);
           clearTimeout(this.redButtonHighlightTimeout);
-          //RESET EVERYTHING
         }
 
-
-
       });
-    
     }
   };
 
@@ -543,7 +675,7 @@ export default class App extends Component<Props> {
             muted={this.state.isMuted}
             onLoad={this._onVideoLoad}
             onProgress={this._onVideoProgress}
-            style={[styles.video, { width: DEVICE_WIDTH, height: DEVICE_HEIGHT }]}
+            style={[styles.video, { width: 668, height: 375 }]}
             source={{ uri: 'https://s3-us-west-1.amazonaws.com/gr-video-assets/180302_Wordplay_Demo_v1.mp4' }}
           />
 
@@ -612,27 +744,60 @@ export default class App extends Component<Props> {
                 <View style={styles.speechActivityContainer}>
               
                 {this.state.speechActivityImageContainer && 
-                  <View style={styles.speechActivityImageContainer}>
-                    <Image style={styles.speechActivityImage} source={this.state.speechActivityImage} />
-                  </View>
+                  <TouchableOpacity>
+                    <View style={styles.speechActivityImageContainer}>
+                      <Image style={styles.speechActivityImage} source={this.state.speechActivityImage} />
+                    </View>
+                  </TouchableOpacity>
                 }
 
                 {this.state.speechActivityButtonsContainer &&
-                  <TouchableOpacity onPress={() => this._onPressSpeechRecognition()}>>
+                  <TouchableOpacity>
                     <View style={styles.speechActivityIconContainer}>
-                      {!this.state.speechActivityCorrectAnswer &&
-                        <Image style={styles.speechActivityIcon} source={require('./assets/images/microphone.png')} />
-                      }
-                      {this.state.speechActivityCorrectAnswer &&
-                        <Image style={styles.speechActivityIcon} source={require('./assets/images/star.png')} />
-                      }
+
+                    {this.state.speechActivityProcessing && 
+                      <Animated.View style={
+                        {borderColor: 'rgba(15,123,232, 0.7)', borderWidth: 5, position: 'absolute', height: 90, width: 90, borderRadius: 100, opacity: this.state.speechActivityProcessingAnim}
+                      }></Animated.View>
+                    }
+
+                    {this.state.speechActivityRecording && this.state.countdownClock &&
+                       <Animated.View style={[{opacity: this.state.speechActivityRecordingAnim}, styles.speechActivityRecordingLeftOne]}></Animated.View>}
+                    {this.state.speechActivityRecording && this.state.countdownClock &&
+                       <Animated.View style={[{opacity: this.state.speechActivityRecordingAnim}, styles.speechActivityRecordingLeftTwo]}></Animated.View>}
+                    {this.state.speechActivityRecording && this.state.countdownClock &&
+                       <Animated.View style={[{opacity: this.state.speechActivityRecordingAnim}, styles.speechActivityRecordingLeftThree]}></Animated.View>}
+                     
+
+                      <View style={
+                          this.state.speechActivityRecording && this.state.countdownClock ? styles.speechActivityRecordingHighlight : {}
+                        }>
+                        {!this.state.speechActivityCorrectAnswer && !this.state.speechActivityIncorrectAnswer &&
+                          <View>
+                           <Image style={styles.speechActivityIcon} source={require('./assets/images/microphone.png')} />
+                          </View>
+                        }
+                        {this.state.speechActivityCorrectAnswer && !this.state.countdownClock &&
+                          <Image style={styles.speechActivityIcon} source={require('./assets/images/happy_star.png')} />
+                        }
+                        {this.state.speechActivityIncorrectAnswer && !this.state.countdownClock &&
+                          <Image style={styles.speechActivityIcon} source={require('./assets/images/sad_star_blue.png')} />
+                        }
+
+                      </View>
+                      {this.state.speechActivityRecording && this.state.countdownClock &&
+                        <Animated.View style={[{opacity: this.state.speechActivityRecordingAnim}, styles.speechActivityRecordingRightOne]}></Animated.View>}
+                      {this.state.speechActivityRecording && this.state.countdownClock &&
+                        <Animated.View style={[{opacity: this.state.speechActivityRecordingAnim}, styles.speechActivityRecordingRightTwo]}></Animated.View>}
+                      {this.state.speechActivityRecording && this.state.countdownClock &&
+                        <Animated.View style={[{opacity: this.state.speechActivityRecordingAnim}, styles.speechActivityRecordingRightThree]}></Animated.View>}
+
                     </View>
                   </TouchableOpacity>
                 }
               
               </View>
             }
-
 
 
 
@@ -724,8 +889,8 @@ const styles = StyleSheet.create({
   },
   videoContainer: {
     flex: 1,
-    height: DEVICE_HEIGHT,
-    width: DEVICE_WIDTH,
+    height: 375,
+    width: 668,
     backgroundColor: '#000000',
     position: 'relative'
   },
@@ -917,13 +1082,10 @@ const styles = StyleSheet.create({
   trueFalseGreenYesButtonHighlightSelected: {
     borderColor: '#48AA09'
   },
-  speechActivityContainer: {
-
-  },
   speechActivityImageContainer: {
     zIndex: 3,
     position: 'relative',
-    height: 150,
+    height: 140,
     width: 160,
     marginTop: 15,
     borderWidth: 2,
@@ -939,13 +1101,72 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   speechActivityIconContainer: {
+    width: 90,
+    height: 90,
     alignSelf: 'center',
     marginTop: 15,
-    zIndex: 3
+    zIndex: 3,
+    backgroundColor: '#ffffff',
+    borderRadius: 100,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  speechActivityRecordingHighlight: {
+    // borderColor: 'rgba(15,123,232, 1)',
+    // borderWidth: 5,
+    // borderRadius: 100
   },
   speechActivityIcon: {
-    width: 90,
-    height: 90
+    width: 50,
+    height: 50
+  },
+  speechActivityRecordingLeftOne: {
+    top: 40, 
+    left: 15, 
+    backgroundColor: 'rgb(15,123,232)', 
+    height: 10, 
+    width: 3, 
+    position: 'absolute'
+  },
+  speechActivityRecordingLeftTwo: {
+    top: 35, 
+    left: 20, 
+    backgroundColor: 'rgb(15,123,232)', 
+    height: 20, 
+    width: 3, 
+    position: 'absolute'
+  },
+  speechActivityRecordingLeftThree: {
+    top: 30, 
+    left: 25, 
+    backgroundColor: 'rgb(15,123,232)', 
+    height: 30, 
+    width: 3, 
+    position: 'absolute'
+  },
+  speechActivityRecordingRightOne: {
+    top: 40, 
+    right: 15, 
+    backgroundColor: 'rgb(15,123,232)', 
+    height: 10, 
+    width: 3, 
+    position: 'absolute'
+  },
+  speechActivityRecordingRightTwo: {
+    top: 35, 
+    right: 20, 
+    backgroundColor: 'rgb(15,123,232)', 
+    height: 20, 
+    width: 3, 
+    position: 'absolute'
+  },
+  speechActivityRecordingRightThree: {
+    top: 30, 
+    right: 25, 
+    backgroundColor: 'rgb(15,123,232)', 
+    height: 30, 
+    width: 3, 
+    position: 'absolute'
   },
   multipleChoiceContainer: {
     flexDirection: 'row',
