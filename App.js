@@ -355,11 +355,13 @@ export default class App extends Component<Props> {
   _checkSpeechActivityAnswer = (speechScore) => {
     if (parseFloat(speechScore, 10) >= 0.5) {
       this.setState({
+        speechActivityProcessing: false,
         speechActivityCorrectAnswer: true
       });
       this.incrementTicketCounter();
     } else {
       this.setState({
+        speechActivityProcessing: false,
         speechActivityIncorrectAnswer: true
       });
     }
@@ -443,7 +445,9 @@ export default class App extends Component<Props> {
       var uniqId = Date.now();
       var uniqAudioPath = AudioUtils.DocumentDirectoryPath + '/' + apiObject.pcmFileName + '-' + uniqId + '.lpcm';
       this.setState({
-        speechActivityAudioPath: uniqAudioPath
+        speechActivityAudioPath: uniqAudioPath,
+        speechActivityCorrectAnswer: false,
+        speechActivityIncorrectAnswer: false
       });
       this._startSpeechActivityRecording(uniqAudioPath, apiObject);
     }
@@ -739,7 +743,7 @@ animateSpeechActivityRecording = (iterations) => {
             muted={this.state.isMuted}
             onLoad={this._onVideoLoad}
             onProgress={this._onVideoProgress}
-            style={[styles.video, { width: 668, height: 375 }]}
+            style={[styles.video, { width: 736, height: 414 }]}
             source={{ uri: 'https://s3-us-west-1.amazonaws.com/gr-video-assets/Word+Play_030718.mp4'}}
           />
 
@@ -820,7 +824,7 @@ animateSpeechActivityRecording = (iterations) => {
 
                     {this.state.speechActivityProcessing && 
                       <Animated.View style={
-                        {borderColor: 'rgba(15,123,232, 0.7)', borderWidth: 5, position: 'absolute', height: 90, width: 90, borderRadius: 100, opacity: this.state.speechActivityProcessingAnim}
+                        {borderColor: '#ffffff', borderWidth: 5, position: 'absolute', height: 90, width: 90, borderRadius: 100, opacity: this.state.speechActivityProcessingAnim}
                       }></Animated.View>
                     }
 
@@ -834,7 +838,7 @@ animateSpeechActivityRecording = (iterations) => {
                       <View>
                         {!this.state.speechActivityCorrectAnswer && !this.state.speechActivityIncorrectAnswer &&
                           <View>
-                           <Image style={styles.speechActivityIcon} source={require('./assets/images/microphone.png')} />
+                           <Image style={styles.speechActivityIcon} source={require('./assets/images/tencent_microphone_sm.png')} />
                           </View>
                         }
                         {this.state.speechActivityCorrectAnswer && !this.state.countdownClock &&
@@ -943,8 +947,8 @@ const styles = StyleSheet.create({
   },
   videoContainer: {
     flex: 1,
-    height: 375,
-    width: 668,
+    height: 414,
+    width: 736,
     backgroundColor: '#000000',
     position: 'relative'
   },
@@ -1160,59 +1164,59 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 15,
     zIndex: 3,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'rgb(47, 154, 224)',
     borderRadius: 100,
     alignItems: 'center',
     justifyContent: 'center'
   },
   speechActivityIcon: {
-    width: 50,
-    height: 50
+    // width: 50,
+    // height: 50
   },
   speechActivityRecordingLeftOne: {
     top: 40, 
-    left: 15, 
-    backgroundColor: 'rgb(15,123,232)', 
+    left: 10, 
+    backgroundColor: 'rgb(8, 50, 90)', 
     height: 10, 
     width: 3, 
     position: 'absolute'
   },
   speechActivityRecordingLeftTwo: {
     top: 35, 
-    left: 20, 
-    backgroundColor: 'rgb(15,123,232)', 
+    left: 15, 
+    backgroundColor: 'rgb(8, 50, 90)', 
     height: 20, 
     width: 3, 
     position: 'absolute'
   },
   speechActivityRecordingLeftThree: {
     top: 30, 
-    left: 25, 
-    backgroundColor: 'rgb(15,123,232)', 
+    left: 20, 
+    backgroundColor: 'rgb(8, 50, 90)', 
     height: 30, 
     width: 3, 
     position: 'absolute'
   },
   speechActivityRecordingRightOne: {
     top: 40, 
-    right: 15, 
-    backgroundColor: 'rgb(15,123,232)', 
+    right: 10, 
+    backgroundColor: 'rgb(8, 50, 90)', 
     height: 10, 
     width: 3, 
     position: 'absolute'
   },
   speechActivityRecordingRightTwo: {
     top: 35, 
-    right: 20, 
-    backgroundColor: 'rgb(15,123,232)', 
+    right: 15, 
+    backgroundColor: 'rgb(8, 50, 90)', 
     height: 20, 
     width: 3, 
     position: 'absolute'
   },
   speechActivityRecordingRightThree: {
     top: 30, 
-    right: 25, 
-    backgroundColor: 'rgb(15,123,232)', 
+    right: 20, 
+    backgroundColor: 'rgb(8, 50, 90)', 
     height: 30, 
     width: 3, 
     position: 'absolute'
