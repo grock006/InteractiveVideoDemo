@@ -1,6 +1,7 @@
 # OSX
 #
 .DS_Store
+*.mp4
 
 # Xcode
 #
