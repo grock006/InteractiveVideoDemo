@@ -15,6 +15,7 @@ import {
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation';
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
+import videoSRC from './assets/videos/video_030718.mp4'
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 
@@ -236,7 +237,7 @@ export default class App extends Component<Props> {
        countdownClock: false,
        countdownClockSeconds: null,
        isVideoLoaded: false,
-       isPaused: this.f,
+       isPaused: this.t,
        isMuted: this.f,
        interactiveContainer: false,
        trueFalse: false,
@@ -271,12 +272,16 @@ export default class App extends Component<Props> {
   }
 
   componentDidMount() {
-    Orientation.lockToLandscape();
+    Orientation.lockToLandscape();//ComponentWillMount?
 
     AudioRecorder.onFinished = (data) => {
       this._finishRecording(data.status === "OK", data.audioFileURL);
     };
   };
+
+  componentWillUnmount() {
+    //cleanup
+  }
 
   countdownClock() {
     this.setState(prevState => ({
@@ -744,7 +749,7 @@ animateSpeechActivityRecording = (iterations) => {
             onLoad={this._onVideoLoad}
             onProgress={this._onVideoProgress}
             style={[styles.video, { width: 736, height: 414 }]}
-            source={{ uri: 'https://s3-us-west-1.amazonaws.com/gr-video-assets/Word+Play_030718.mp4'}}
+            source={videoSRC}
           />
 
           <View style={styles.ticketContainer}>
