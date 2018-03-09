@@ -15,6 +15,7 @@ import {
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation';
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
+import Sound from 'react-native-sound';
 import videoSRC from './assets/videos/video_030718.mp4'
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
@@ -33,8 +34,8 @@ const mockAPI = [
     interactivityStart: 17, //60, //time to allow user interactivity, start countdown clock 
     countdownClockStart: 17, //60, //time to display clock countdown, should be same as interactivityStart
     interactivityDuration: 3, //total time for user interactivity, can use instead of countdown duration
-    hightlightCorrectAnswerStart: 21, //time to highlight correct answer
-    hightlightCorrectAnswerDuration: 3, //duration to highlight correct answer
+    highlightCorrectAnswerStart: 21, //time to highlight correct answer
+    highlightCorrectAnswerDuration: 3, //duration to highlight correct answer
     activityEnd: 24, //time to end all activity screens
     activityTotalDuration: 18, //total time for activity start to finish, everything included
     activityImages: require('./assets/images/tf/s1_eyes.png'), //image assets, target images, interactive icons, etc.
@@ -53,8 +54,8 @@ const mockAPI = [
     interactivityStart: 29, //83,
     countdownClockStart: 29, //83,
     interactivityDuration: 2,
-    hightlightCorrectAnswerStart: 32,
-    hightlightCorrectAnswerDuration: 3,
+    highlightCorrectAnswerStart: 32,
+    highlightCorrectAnswerDuration: 3,
     activityEnd: 35,
     activityImages: require('./assets/images/tf/s1_knee.png'),
     correctAnswer: 'red'
@@ -120,14 +121,14 @@ const mockAPI = [
     interactivityStart: 80, //195,
     countdownClockStart: 80, //195,
     interactivityDuration: 3,
-    hightlightCorrectAnswerStart: 84,
-    hightlightCorrectAnswerDuration: 2,
+    highlightCorrectAnswerStart: 84,
+    highlightCorrectAnswerDuration: 2,
     activityEnd: 86,
-    activityImages: [ 
-      require('./assets/images/mc/foot.png'), 
-      require('./assets/images/mc/ear.png'), 
-      require('./assets/images/mc/finger.png'), 
-      require('./assets/images/mc/head.png')
+    activityOptions: [
+      {id: 1, image: require('./assets/images/mc/foot.png')},
+      {id: 2, image: require('./assets/images/mc/ear.png')},
+      {id: 3, image: require('./assets/images/mc/finger.png')},
+      {id: 4, image: require('./assets/images/mc/head.png')}
     ],
     correctAnswer: 1,
   },
@@ -141,14 +142,14 @@ const mockAPI = [
     interactivityStart: 89,
     countdownClockStart: 89,
     interactivityDuration: 3,
-    hightlightCorrectAnswerStart: 93, //216,
-    hightlightCorrectAnswerDuration: 3,
+    highlightCorrectAnswerStart: 93, //216,
+    highlightCorrectAnswerDuration: 3,
     activityEnd: 96,
-    activityImages: [ 
-      require('./assets/images/mc/body.png'), 
-      require('./assets/images/mc/finger.png'), 
-      require('./assets/images/mc/feet.png'), 
-      require('./assets/images/mc/hand.png')
+    activityOptions: [
+      {id: 1, image: require('./assets/images/mc/body.png')},
+      {id: 2, image: require('./assets/images/mc/finger.png')},
+      {id: 3, image: require('./assets/images/mc/feet.png')},
+      {id: 4, image: require('./assets/images/mc/hand.png')}
     ],
     correctAnswer: 3,
   },
@@ -162,14 +163,14 @@ const mockAPI = [
     interactivityStart: 99,
     countdownClockStart: 99,
     interactivityDuration: 4,
-    hightlightCorrectAnswerStart: 103, //216,
-    hightlightCorrectAnswerDuration: 3,
+    highlightCorrectAnswerStart: 103, //216,
+    highlightCorrectAnswerDuration: 3,
     activityEnd: 104,
-    activityImages: [ 
-      require('./assets/images/mc/ear.png'), 
-      require('./assets/images/mc/foot.png'), 
-      require('./assets/images/mc/head.png'), 
-      require('./assets/images/tf/s1_knee.png')
+    activityOptions: [
+      {id: 1, image: require('./assets/images/mc/ear.png')},
+      {id: 2, image: require('./assets/images/mc/foot.png')},
+      {id: 3, image: require('./assets/images/mc/head.png')},
+      {id: 4, image: require('./assets/images/tf/s1_knee.png')}
     ],
     correctAnswer: 4,
   },
@@ -226,6 +227,20 @@ const mockAPI = [
   }
 ];
 
+const soundEffects = {
+  click: require('./assets/audio/click.mp3'),
+  correctAnswer: require('./assets/audio/correct_answer.mp3'),
+  incorrectAnswer: require('./assets/audio/incorrect_answer.mp3'),
+  countdownTimerEnd: require('./assets/audio/countdown_timer_end.mp3'),
+  interactiveScreenSlideIn: require('./assets/audio/interactive_screen_slide_in.mp3')
+}
+
+const clickSfx = new Sound(soundEffects.click, (error) => {console.log(error)});
+const correctAnswerSfx = new Sound(soundEffects.correctAnswer, (error) => {console.log(error)});
+const incorrectAnswerSfx = new Sound(soundEffects.incorrectAnswer, (error) => {console.log(error)});
+const countdownTimerEndSfx = new Sound(soundEffects.countdownTimerEnd, (error) => {console.log(error)});
+const interactiveScreenSlideInSfx = new Sound(soundEffects.interactiveScreenSlideIn, (error) => {console.log(error)});
+
 type Props = {};
 export default class App extends Component<Props> {
   constructor(props) {
@@ -264,7 +279,7 @@ export default class App extends Component<Props> {
        multipleChoice: false,
        multipleChoiceAnswer: null,
        multipleChoiceSelected: null,
-       multipleChoiceImages: [],
+       multipleChoiceOptions: [],
        multipleChoiceCheckmark: false,
        multipleChoiceCorrectAnswer: null,
        resultsScreen: false
@@ -315,7 +330,7 @@ export default class App extends Component<Props> {
         multipleChoice: false,
         multipleChoiceAnswer: null,
         multipleChoiceSelected: null,
-        multipleChoiceImages: [],
+        multipleChoiceOptions: [],
         multipleChoiceCheckmark: false,
         multipleChoiceCorrectAnswer: null,
       });
@@ -344,7 +359,10 @@ export default class App extends Component<Props> {
         trueFalseCorrectAnswer: correctAnswer
       });
       if (correctAnswer === this.state.trueFalseSelected) {
+        correctAnswerSfx.play();
         this.incrementTicketCounter();
+      } else {
+        incorrectAnswerSfx.play();
       }
     }
     if (activityType === 'multipleChoice') {
@@ -352,7 +370,10 @@ export default class App extends Component<Props> {
         multipleChoiceCorrectAnswer: correctAnswer
       });
       if (correctAnswer === this.state.multipleChoiceSelected) {
+        correctAnswerSfx.play();
         this.incrementTicketCounter();
+      } else {
+        incorrectAnswerSfx.play();
       }
     } 
   };
@@ -372,7 +393,7 @@ export default class App extends Component<Props> {
     }
   }
 
-  _setHighlightCorrectAnswer = (boolean, activityType) => {
+  _setHighlightCorrectAnswer = (boolean, activityType, highlightCorrectAnswerDuration) => {
     if (activityType === 'trueFalse') {
       this.setState({
         trueFalseCheckmark: boolean
@@ -383,7 +404,29 @@ export default class App extends Component<Props> {
         multipleChoiceCheckmark: boolean
       });
     }
+
+    this.highlightCorrectAnswerTimeout = setTimeout(
+      () => {
+        this._setHighlightCorrectAnswer(false);
+        clearTimeout(this.highlightCorrectAnswerTimeout);
+      }, highlightCorrectAnswerDuration * 1000
+    )
   };
+
+  _setCountdownClock = (mockAPI) => {
+    this._setCountdownClockDisplay(true);
+    this._setCountdownClockSeconds(mockAPI.interactivityDuration);
+    this.countdownClockInterval = setInterval(
+      () => {
+        this.countdownClock()
+        if(this.state.countdownClockSeconds < 0) {
+          clearInterval(this.countdownClockInterval);
+          this._stopInteractivity(mockAPI);
+          this._setCountdownClockDisplay(false);
+        }
+      }, 1000
+    );
+  }
 
   _setCountdownClockSeconds = (countdownClockSeconds) => {
     this.setState({
@@ -403,7 +446,7 @@ export default class App extends Component<Props> {
     });
   };
 
-  _setInteractiveTargetImageDisplay = (boolean, activityType, activityImages) => {
+  _setInteractiveTargetImageDisplay = (boolean, activityType, activityImages, activityOptions) => {
     if (activityType === 'trueFalse') {
       this.setState({
         trueFalseImageContainer: boolean,
@@ -413,7 +456,7 @@ export default class App extends Component<Props> {
     if (activityType === 'multipleChoice') {
       this.setState({
         multipleChoice: boolean,
-        multipleChoiceImages: activityImages
+        multipleChoiceOptions: activityOptions
       });
     }
     if (activityType === 'speechActivity') {
@@ -439,7 +482,20 @@ export default class App extends Component<Props> {
     }
   };
 
+  _highlightTrueFalse = (answer) => {
+    this.setState({
+      trueFalseSelected: answer
+    });
+    this.highlightTimeout = setTimeout(
+      () => {
+        this._highlightTrueFalse(null);
+        clearTimeout(this.highlightTimeout);
+      }, 650
+    );
+  }
+
   _onPressTrueFalse = (answer) => {
+    clickSfx.play((success) => {console.log(success)})
     this.setState({
       trueFalseSelected: answer
     });
@@ -579,6 +635,7 @@ animateSpeechActivityRecording = (iterations) => {
   }
 
   _onPressMultipleChoice = (answer) => {
+    clickSfx.play((success) => {console.log(success)})
     this.setState({
       multipleChoiceSelected: answer
     });
@@ -588,6 +645,7 @@ animateSpeechActivityRecording = (iterations) => {
     this.setState({
       isVideoLoaded: true
     });
+    //this.player.seek(75)
   };
 
     _onPressReloadVideo = () => {
@@ -625,7 +683,7 @@ animateSpeechActivityRecording = (iterations) => {
         multipleChoice: false,
         multipleChoiceAnswer: null,
         multipleChoiceSelected: null,
-        multipleChoiceImages: [],
+        multipleChoiceOptions: [],
         multipleChoiceCheckmark: false,
         multipleChoiceCorrectAnswer: null,
         resultsScreen: false
@@ -646,82 +704,53 @@ animateSpeechActivityRecording = (iterations) => {
 
   _playInteractiveSequence = (status) => {
     if (status && mockAPI) {
-
-      mockAPI.forEach((mockAPI) => {
+      let currentTime = Math.round(status.currentTime);
+      mockAPI.forEach((mockAPI) => {  
         // activityStart: 3, //time to start interactive segment within overall video, in seconds
         // interactiveScreenStart: 3, //time to display interactive screen
-        if (Math.round(status.currentTime) === mockAPI.activityStart ) {
+        if (currentTime === mockAPI.activityStart ) {
           this._setInteractiveContainerDisplay(true);
         }
 
         //interactiveTargetImageStart: 5, //time to display activity target image or images
-        if (Math.round(status.currentTime) === mockAPI.interactiveTargetImageStart ) {
-          this._setInteractiveTargetImageDisplay(true, mockAPI.activityType, mockAPI.activityImages);
+        if (currentTime === mockAPI.interactiveTargetImageStart ) {
+          this._setInteractiveTargetImageDisplay(true, mockAPI.activityType, mockAPI.activityImages, mockAPI.activityOptions);
         }
 
         // interactiveButtonStart: 7, //time to display interactive buttons, non-clickable, could also be microphone
-        if (Math.round(status.currentTime) === mockAPI.interactiveButtonStart ) {
+        if (currentTime === mockAPI.interactiveButtonStart ) {
           this._setInteractiveTargetButtonsDisplay(true, mockAPI.activityType);
         }
         
-        // redButtonHighlightStart: 8, //time to display red button highlight
-        if (Math.round(status.currentTime) === mockAPI.redButtonHighlightStart ) {
-          this._onPressTrueFalse('red')
-          this.redButtonHighlightTimeout = setTimeout(
-            () => {
-              this._onPressTrueFalse(null)
-            }, 650
-          );
+        // greenButtonHighlightStart: 9, //time to display green button highlight
+        if (currentTime === mockAPI.greenButtonHighlightStart ) {
+          this._highlightTrueFalse('green')
         }
 
-        // greenButtonHighlightStart: 9, //time to display green button highlight
-        if (Math.round(status.currentTime) === mockAPI.greenButtonHighlightStart ) {
-          this._onPressTrueFalse('green')
-          this.greenButtonHighlightTimeout = setTimeout(
-            () => {
-              this._onPressTrueFalse(null);
-            }, 650
-          );
+        // redButtonHighlightStart: 8, //time to display red button highlight
+        if (currentTime === mockAPI.redButtonHighlightStart ) {
+          this._highlightTrueFalse('red')
         }
         
         // interactivityStart: 10, //time to allow user interactivity, start countdown clock 
         // countdownClockStart: 10, //time to display clock countdown, should be same as interactivityStart
         // interactivityDuration: 5, //total time for user interactivity, can use instead of countdown duration
-        if (Math.round(status.currentTime) === mockAPI.interactivityStart ) {
-          this._setCountdownClockDisplay(true);
-          this._setCountdownClockSeconds(mockAPI.interactivityDuration);
+        if (currentTime === mockAPI.interactivityStart ) {
+          this._setCountdownClock(mockAPI);
           this._startInteractivity(mockAPI);
-          this.countdownClockInterval = setInterval(
-            () => {
-              this.countdownClock()
-              if(this.state.countdownClockSeconds < 0) {
-                clearInterval(this.countdownClockInterval);
-                this._stopInteractivity(mockAPI);
-                this._setCountdownClockDisplay(false);
-              }
-            }, 1000
-          );
         }
         
-        // hightlightCorrectAnswerStart: 15, //time to highlight correct answer
-        // hightlightCorrectAnswerDuration: 3, //duration to highlight correct answer
+        // highlightCorrectAnswerStart: 15, //time to highlight correct answer
+        // highlightCorrectAnswerDuration: 3, //duration to highlight correct answer
         // check correctAnswer: 'red' //correct answer to the activity question
-        if (Math.round(status.currentTime) === mockAPI.hightlightCorrectAnswerStart ) {
+        if (currentTime === mockAPI.highlightCorrectAnswerStart ) {
           this._checkAnswer(mockAPI.correctAnswer, mockAPI.activityType);
-          this._setHighlightCorrectAnswer(true, mockAPI.activityType);
-          this.highlightCorrectAnswerTimeout = setTimeout(
-            () => {
-              this._setHighlightCorrectAnswer(false, mockAPI.activityType);
-            }, mockAPI.hightlightCorrectAnswerDuration * 1000
-          )
+          this._setHighlightCorrectAnswer(true, mockAPI.activityType, mockAPI.highlightCorrectAnswerDuration);
         }
         
         // activityEnd: 20, //time to end activity, hide all screens
-        if (Math.round(status.currentTime) === mockAPI.activityEnd ) {
+        if (currentTime === mockAPI.activityEnd ) {
           this._setActivityEnd(mockAPI.activityType);
-          clearTimeout(this.highlightCorrectAnswerTimeout);
-          clearTimeout(this.greenButtonHighlightTimeout);
-          clearTimeout(this.redButtonHighlightTimeout);
         }
 
       });
@@ -870,66 +899,27 @@ animateSpeechActivityRecording = (iterations) => {
               
               {this.state.multipleChoice && 
                 <View style={styles.multipleChoiceContainer}>
-                  <TouchableOpacity
-                    disabled={Boolean(this.state.multipleChoiceSelected) || !this.state.countdownClock}    
-                    onPress={() => this._onPressMultipleChoice(1)}>
-                    <View style={[styles.multipleChoiceImageContainer,
-                      this.state.multipleChoiceSelected === 1 ? styles.multipleChoiceImageContainerSelected : {},
-                      (this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 1)) ? styles.multipleChoiceImageContainerCorrect : {}
-                      ]}>
-                      <Image style={styles.multipleChoiceImage} source={this.state.multipleChoiceImages[0]}  />
-                      { this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 1) &&
-                        <View style={styles.multipleChoiceCheckmarkContainer}>
-                          <Image source={require('./assets/images/green_circle_checkmark.png')} />
-                        </View>
-                      }
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    disabled={Boolean(this.state.multipleChoiceSelected) || !this.state.countdownClock}
-                    onPress={() => this._onPressMultipleChoice(2)}>
-                    <View style={[styles.multipleChoiceImageContainer,
-                       this.state.multipleChoiceSelected === 2 ? styles.multipleChoiceImageContainerSelected : {},
-                       (this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 2)) ? styles.multipleChoiceImageContainerCorrect : {}
-                      ]}>
-                      <Image style={styles.multipleChoiceImage} source={this.state.multipleChoiceImages[1]}   />
-                      { this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 2) &&
-                        <View style={styles.multipleChoiceCheckmarkContainer}>
-                          <Image source={require('./assets/images/green_circle_checkmark.png')} />
-                        </View>
-                      }
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    disabled={Boolean(this.state.multipleChoiceSelected) || !this.state.countdownClock}
-                    onPress={() => this._onPressMultipleChoice(3)}>              
-                    <View style={[styles.multipleChoiceImageContainer,
-                      this.state.multipleChoiceSelected === 3 ? styles.multipleChoiceImageContainerSelected : {},
-                      (this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 3)) ? styles.multipleChoiceImageContainerCorrect : {}
-                      ]}>
-                      <Image style={styles.multipleChoiceImage} source={this.state.multipleChoiceImages[2]}   />
-                      { this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 3) &&
-                        <View style={styles.multipleChoiceCheckmarkContainer}>
-                          <Image source={require('./assets/images/green_circle_checkmark.png')} />
-                        </View>
-                      }
-                    </View>
-                  </TouchableOpacity>                  
-                  <TouchableOpacity
-                    disabled={Boolean(this.state.multipleChoiceSelected) || !this.state.countdownClock}
-                    onPress={() => this._onPressMultipleChoice(4)}>
-                    <View style={[styles.multipleChoiceImageContainer,
-                      this.state.multipleChoiceSelected === 4 ? styles.multipleChoiceImageContainerSelected : {},
-                      (this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 4)) ? styles.multipleChoiceImageContainerCorrect : {}
-                      ]}>
-                      <Image style={styles.multipleChoiceImage} source={this.state.multipleChoiceImages[3]}   />
-                      { this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === 4) &&
-                        <View style={styles.multipleChoiceCheckmarkContainer}>
-                          <Image source={require('./assets/images/green_circle_checkmark.png')} />
-                        </View>
-                      }
-                    </View>
-                  </TouchableOpacity>
+                {this.state.multipleChoiceOptions.map((option, index) => {
+                  return(
+                    <TouchableOpacity
+                      key={index}
+                      disabled={Boolean(this.state.multipleChoiceSelected) || !this.state.countdownClock}    
+                      onPress={() => this._onPressMultipleChoice(option.id)}>
+                      <View style={[styles.multipleChoiceImageContainer,
+                        this.state.multipleChoiceSelected === option.id ? styles.multipleChoiceImageContainerSelected : {},
+                        (this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === option.id)) ? styles.multipleChoiceImageContainerCorrect : {}
+                        ]}>
+                        <Image style={styles.multipleChoiceImage} source={option.image}  />
+                        { this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === option.id) &&
+                          <View style={styles.multipleChoiceCheckmarkContainer}>
+                            <Image source={require('./assets/images/green_circle_checkmark.png')} />
+                          </View>
+                        }
+                      </View>
+                    </TouchableOpacity>
+                    )
+                })}
+      
                 </View>}         
             </View>}
 

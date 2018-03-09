@@ -4,6 +4,10 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.brentvatne.react.ReactVideoPackage;
+import com.zmxv.RNSound.RNSoundPackage;
+import com.github.yamill.orientation.OrientationPackage;
+import com.rnim.rn.audio.ReactNativeAudioPackage;
+import com.brentvatne.react.ReactVideoPackage;
 import com.github.yamill.orientation.OrientationPackage;
 import com.rnim.rn.audio.ReactNativeAudioPackage;
 import com.github.yamill.orientation.OrientationPackage;
@@ -28,6 +32,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactVideoPackage(),
+            new RNSoundPackage(),
+            new OrientationPackage(),
+            new ReactNativeAudioPackage(),
             new ReactVideoPackage(),
             new OrientationPackage(),
             new ReactNativeAudioPackage(),
