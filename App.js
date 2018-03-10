@@ -16,7 +16,7 @@ import Video from 'react-native-video';
 import Orientation from 'react-native-orientation';
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
 import Sound from 'react-native-sound';
-import videoSRC from './assets/videos/video_030718.mp4'
+import videoSRC from './assets/videos/video_030918.mp4'
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 
@@ -25,55 +25,54 @@ const mockAPI = [
     activityId: 1,
     activityType: 'trueFalse',
     interactive: true,
-    activityStart: 10,//54, //time to start interactive segment within overall video, in seconds
-    interactiveScreenStart: 10, //54, //time to display interactive screen
-    interactiveTargetImageStart: 10, //54, //time to display activity target image or images
-    interactiveButtonStart: 10, //54, //time to display interactive buttons, non-clickable, could also be microphone
-    greenButtonHighlightStart: 14, //58, //time to display green button highlight
-    redButtonHighlightStart: 15, //59, //time to display red button highlight
-    interactivityStart: 17, //60, //time to allow user interactivity, start countdown clock 
-    countdownClockStart: 17, //60, //time to display clock countdown, should be same as interactivityStart
+    activityStart: 12,//10,//54, //time to start interactive segment within overall video, in seconds
+    interactiveScreenStart: 12,//10, //54, //time to display interactive screen
+    interactiveTargetImageStart: 12,//10, //54, //time to display activity target image or images
+    interactiveButtonStart: 12,//10, //54, //time to display interactive buttons, non-clickable, could also be microphone
+    greenButtonHighlightStart: 15, //58, //time to display green button highlight
+    redButtonHighlightStart: 16, //59, //time to display red button highlight
+    interactivityStart: 18, //60, //time to allow user interactivity, start countdown clock 
+    countdownClockStart: 18, //60, //time to display clock countdown, should be same as interactivityStart
     interactivityDuration: 3, //total time for user interactivity, can use instead of countdown duration
     highlightCorrectAnswerStart: 21, //time to highlight correct answer
     highlightCorrectAnswerDuration: 3, //duration to highlight correct answer
     activityEnd: 24, //time to end all activity screens
-    activityTotalDuration: 18, //total time for activity start to finish, everything included
-    activityImages: require('./assets/images/tf/s1_eyes.png'), //image assets, target images, interactive icons, etc.
+    activityImages: require('./assets/images/word_play/eyes.png'), //image assets, target images, interactive icons, etc.
     correctAnswer: 'green' //correct answer to the activity question//
   },
   {
     activityId: 2,
     activityType: 'trueFalse',
     interactive: true,
-    activityStart: 25, //76,
-    interactiveScreenStart: 25, //76,
-    interactiveTargetImageStart: 25, //76,
-    interactiveButtonStart: 25, //76,
-    greenButtonHighlightStart: 27, 
-    redButtonHighlightStart: 28, 
-    interactivityStart: 29, //83,
-    countdownClockStart: 29, //83,
+    activityStart: 26, //76,
+    interactiveScreenStart: 26, //76,
+    interactiveTargetImageStart: 26, //76,
+    interactiveButtonStart: 26, //76,
+    greenButtonHighlightStart: 28, 
+    redButtonHighlightStart: 29, 
+    interactivityStart: 31, //83,
+    countdownClockStart: 31, //83,
     interactivityDuration: 2,
-    highlightCorrectAnswerStart: 32,
+    highlightCorrectAnswerStart: 33,
     highlightCorrectAnswerDuration: 3,
-    activityEnd: 35,
-    activityImages: require('./assets/images/tf/s1_knee.png'),
+    activityEnd: 36,
+    activityImages: require('./assets/images/word_play/fingers.png'),
     correctAnswer: 'red'
   },
   {
     activityId: 3,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 44, //124,
-    interactiveScreenStart: 44, //124,
-    interactiveTargetImageStart: 44, //124,
-    interactiveButtonStart: 44, //124,
-    interactivityStart: 44, //127, //start speech recording //set highlight class (animation later)
-    countdownClockStart: 44, //127,
-    interactivityDuration: 2, //stop speech recording //remove highlight class
-    interactivityAnimationDuration: 2,
-    activityEnd: 51,
-    activityImages: require('./assets/images/mc/nose.png'),
+    activityStart: 47, //124,
+    interactiveScreenStart: 47, //124,
+    interactiveTargetImageStart: 47, //124,
+    interactiveButtonStart: 47, //124,
+    interactivityStart: 49, //127, //start speech recording //set highlight class (animation later)
+    countdownClockStart: 49, //127,
+    interactivityDuration: 3, //stop speech recording //remove highlight class
+    interactivityAnimationDuration: 3, //possibly need to trigger highlight at the right time 58
+    activityEnd: 57,
+    activityImages: require('./assets/images/word_play/nose.png'),
     correctAnswer: 'this is a nose',
     pcmFileName: 'nose'
   },
@@ -81,16 +80,16 @@ const mockAPI = [
     activityId: 4,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 52,
-    interactiveScreenStart: 52,
-    interactiveTargetImageStart: 52,
-    interactiveButtonStart: 52,
-    interactivityStart: 52,
-    countdownClockStart: 52,
-    interactivityDuration: 2,
-    interactivityAnimationDuration: 2,
-    activityEnd: 58,
-    activityImages: require('./assets/images/mc/ear.png'),
+    activityStart: 58,
+    interactiveScreenStart: 58,
+    interactiveTargetImageStart: 58,
+    interactiveButtonStart: 58,
+    interactivityStart: 60,
+    countdownClockStart: 60,
+    interactivityDuration: 3,
+    interactivityAnimationDuration: 3,
+    activityEnd: 67,
+    activityImages: require('./assets/images/word_play/ear.png'),
     correctAnswer: 'these are ears',
     pcmFileName: 'ears'
   },
@@ -98,16 +97,16 @@ const mockAPI = [
     activityId: 5,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 59,
-    interactiveScreenStart: 59,
-    interactiveTargetImageStart: 59,
-    interactiveButtonStart: 59,
-    interactivityStart: 60,
-    countdownClockStart: 60,
-    interactivityDuration: 2,
-    interactivityAnimationDuration: 2,
-    activityEnd: 65,
-    activityImages: require('./assets/images/mc/finger.png'),
+    activityStart: 69,
+    interactiveScreenStart: 69,
+    interactiveTargetImageStart: 69,
+    interactiveButtonStart: 69,
+    interactivityStart: 70,
+    countdownClockStart: 70,
+    interactivityDuration: 3,
+    interactivityAnimationDuration: 3,
+    activityEnd: 77,
+    activityImages: require('./assets/images/word_play/finger.png'),
     correctAnswer: 'these are my fingers',
     pcmFileName: 'fingers'
   },
@@ -115,20 +114,20 @@ const mockAPI = [
     activityId: 6,
     activityType: 'multipleChoice',
     interactive: true,
-    activityStart: 76, //192,
-    interactiveScreenStart: 76, //192,
-    interactiveTargetImageStart: 76, //192,
-    interactivityStart: 80, //195,
-    countdownClockStart: 80, //195,
+    activityStart: 85, //207,
+    interactiveScreenStart: 85, //207,
+    interactiveTargetImageStart: 85, //207,
+    interactivityStart: 87,
+    countdownClockStart: 87,
     interactivityDuration: 3,
-    highlightCorrectAnswerStart: 84,
+    highlightCorrectAnswerStart: 90, //216,
     highlightCorrectAnswerDuration: 2,
-    activityEnd: 86,
+    activityEnd: 92,
     activityOptions: [
-      {id: 1, image: require('./assets/images/mc/foot.png')},
-      {id: 2, image: require('./assets/images/mc/ear.png')},
-      {id: 3, image: require('./assets/images/mc/finger.png')},
-      {id: 4, image: require('./assets/images/mc/head.png')}
+      {id: 1, image: require('./assets/images/word_play/foot.png')},
+      {id: 2, image: require('./assets/images/word_play/ear.png')},
+      {id: 3, image: require('./assets/images/word_play/finger.png')},
+      {id: 4, image: require('./assets/images/word_play/head.png')}
     ],
     correctAnswer: 1,
   },
@@ -136,20 +135,20 @@ const mockAPI = [
     activityId: 7,
     activityType: 'multipleChoice',
     interactive: true,
-    activityStart: 87, //207,
-    interactiveScreenStart: 87, //207,
-    interactiveTargetImageStart: 87, //207,
-    interactivityStart: 89,
-    countdownClockStart: 89,
-    interactivityDuration: 3,
-    highlightCorrectAnswerStart: 93, //216,
+    activityStart: 93, //207,
+    interactiveScreenStart: 93, //207,
+    interactiveTargetImageStart: 93, //207,
+    interactivityStart: 95,
+    countdownClockStart: 95,
+    interactivityDuration: 4,
+    highlightCorrectAnswerStart: 99, //216,
     highlightCorrectAnswerDuration: 3,
-    activityEnd: 96,
+    activityEnd: 102,
     activityOptions: [
-      {id: 1, image: require('./assets/images/mc/body.png')},
-      {id: 2, image: require('./assets/images/mc/finger.png')},
-      {id: 3, image: require('./assets/images/mc/feet.png')},
-      {id: 4, image: require('./assets/images/mc/hand.png')}
+      {id: 1, image: require('./assets/images/word_play/body.png')},
+      {id: 2, image: require('./assets/images/word_play/finger.png')},
+      {id: 3, image: require('./assets/images/word_play/feet.png')},
+      {id: 4, image: require('./assets/images/word_play/hand.png')}
     ],
     correctAnswer: 3,
   },
@@ -157,20 +156,20 @@ const mockAPI = [
     activityId: 8,
     activityType: 'multipleChoice',
     interactive: true,
-    activityStart: 97, //207,
-    interactiveScreenStart: 97, //207,
-    interactiveTargetImageStart: 97, //207,
-    interactivityStart: 99,
-    countdownClockStart: 99,
-    interactivityDuration: 4,
-    highlightCorrectAnswerStart: 103, //216,
-    highlightCorrectAnswerDuration: 3,
-    activityEnd: 104,
+    activityStart: 104, //207,
+    interactiveScreenStart: 104, //207,
+    interactiveTargetImageStart: 104, //207,
+    interactivityStart: 105,
+    countdownClockStart: 105,
+    interactivityDuration: 5,
+    highlightCorrectAnswerStart: 110, //216,
+    highlightCorrectAnswerDuration: 2,
+    activityEnd: 112,
     activityOptions: [
-      {id: 1, image: require('./assets/images/mc/ear.png')},
-      {id: 2, image: require('./assets/images/mc/foot.png')},
-      {id: 3, image: require('./assets/images/mc/head.png')},
-      {id: 4, image: require('./assets/images/tf/s1_knee.png')}
+      {id: 1, image: require('./assets/images/word_play/ear.png')},
+      {id: 2, image: require('./assets/images/word_play/foot.png')},
+      {id: 3, image: require('./assets/images/word_play/head.png')},
+      {id: 4, image: require('./assets/images/word_play/knee.png')}
     ],
     correctAnswer: 4,
   },
@@ -178,16 +177,16 @@ const mockAPI = [
     activityId: 9,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 113, //46, //124,
-    interactiveScreenStart: 113, //124,
-    interactiveTargetImageStart: 113, //124,
-    interactiveButtonStart: 113, //124,
-    interactivityStart: 113, //127, //start speech recording //set highlight class (animation later)
-    countdownClockStart: 113, //127,
-    interactivityDuration: 2, //stop speech recording //remove highlight class
-    interactivityAnimationDuration: 2,
-    activityEnd: 120,
-    activityImages: require('./assets/images/mc/body.png'),
+    activityStart: 119, //46, //124,
+    interactiveScreenStart: 119, //124,
+    interactiveTargetImageStart: 119, //124,
+    interactiveButtonStart: 119, //124,
+    interactivityStart: 121, //127, //start speech recording //set highlight class (animation later)
+    countdownClockStart: 121, //127,
+    interactivityDuration: 4, //stop speech recording //remove highlight class
+    interactivityAnimationDuration: 4, //highlight correct answer 128
+    activityEnd: 131,
+    activityImages: require('./assets/images/word_play/body.png'),
     correctAnswer: 'body',
     pcmFileName: 'body'
   },
@@ -195,16 +194,16 @@ const mockAPI = [
     activityId: 10,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 121, //46, //124,
-    interactiveScreenStart: 121, //124,
-    interactiveTargetImageStart: 121, //124,
-    interactiveButtonStart: 121, //124,
-    interactivityStart: 121, //127, //start speech recording //set highlight class (animation later)
-    countdownClockStart: 121, //127,
-    interactivityDuration: 2, //stop speech recording //remove highlight class
-    interactivityAnimationDuration: 2,
-    activityEnd: 129,
-    activityImages: require('./assets/images/mc/mouth.png'),
+    activityStart: 132, //46, //124,
+    interactiveScreenStart: 132, //124,
+    interactiveTargetImageStart: 132, //124,
+    interactiveButtonStart: 132, //124,
+    interactivityStart: 133, //127, //start speech recording //set highlight class (animation later)
+    countdownClockStart: 133, //127,
+    interactivityDuration: 4, //stop speech recording //remove highlight class
+    interactivityAnimationDuration: 4, //highlight 140
+    activityEnd: 143,
+    activityImages: require('./assets/images/word_play/mouth.png'),
     correctAnswer: 'mouth',
     pcmFileName: 'mouth'
   },
@@ -212,16 +211,16 @@ const mockAPI = [
     activityId: 11,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 130, //46, //124,
-    interactiveScreenStart: 130, //124,
-    interactiveTargetImageStart: 130, //124,
-    interactiveButtonStart: 130, //124,
-    interactivityStart: 130, //127, //start speech recording //set highlight class (animation later)
-    countdownClockStart: 130, //127,
-    interactivityDuration: 2, //stop speech recording //remove highlight class
-    interactivityAnimationDuration: 2,
-    activityEnd: 137,
-    activityImages: require('./assets/images/mc/toe.png'),
+    activityStart: 144, //46, //124,
+    interactiveScreenStart: 144, //124,
+    interactiveTargetImageStart: 144, //124,
+    interactiveButtonStart: 144, //124,
+    interactivityStart: 145, //127, //start speech recording //set highlight class (animation later)
+    countdownClockStart: 145, //127,
+    interactivityDuration: 4, //stop speech recording //remove highlight class
+    interactivityAnimationDuration: 4, //highlight 152
+    activityEnd: 155,
+    activityImages: require('./assets/images/word_play/toe.png'),
     correctAnswer: 'toe',
     pcmFileName: 'toe'
   }
@@ -252,7 +251,7 @@ export default class App extends Component<Props> {
        countdownClock: false,
        countdownClockSeconds: null,
        isVideoLoaded: false,
-       isPaused: this.t,
+       isPaused: this.f,
        isMuted: this.f,
        interactiveContainer: false,
        trueFalse: false,
@@ -777,7 +776,7 @@ animateSpeechActivityRecording = (iterations) => {
             muted={this.state.isMuted}
             onLoad={this._onVideoLoad}
             onProgress={this._onVideoProgress}
-            style={[styles.video, { width: 736, height: 414 }]}
+            style={[styles.video, { width: 668, height: 375 }]}
             source={videoSRC}
           />
 
@@ -942,8 +941,8 @@ const styles = StyleSheet.create({
   },
   videoContainer: {
     flex: 1,
-    height: 414,
-    width: 736,
+    height: 375,
+    width: 668,
     backgroundColor: '#000000',
     position: 'relative'
   },
