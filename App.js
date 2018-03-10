@@ -259,7 +259,7 @@ export default class App extends Component<Props> {
        trueFalseButtonsContainer: false,
        trueFalseSelected: null,
        trueFalseCorrect: false,
-       trueFalseCheckmark: true, 
+       trueFalseCheckmark: false, 
        trueFalseCorrectAnswer: null,
        trueFalseImage: null,
        speechActivity: false,
@@ -644,17 +644,15 @@ animateSpeechActivityRecording = (iterations) => {
     this.setState({
       isVideoLoaded: true
     });
-    //this.player.seek(75)
   };
 
     _onPressReloadVideo = () => {
     if(this.player !== null) {
-      this.player.seek(0);
       this.setState({
         ticketCounter: 0,
         countdownClock: false,
-        countdownClockSeconds: null,
-        isVideoLoaded: false,
+        countdownClockSeconds: 0,
+        isVideoLoaded: true,
         isPaused: false,
         isMuted: false,
         interactiveContainer: false,
@@ -673,7 +671,7 @@ animateSpeechActivityRecording = (iterations) => {
         speechActivityIncorrectAnswer: false,
         speechActivityCheckmark: false,
         speechActivityImage: null,
-        speechActivityRecording: true,
+        speechActivityRecording: false,
         speechActivityProcessing: false,
         speechActivityAudioPath: null,
         speechActivityScore: null,
@@ -687,6 +685,7 @@ animateSpeechActivityRecording = (iterations) => {
         multipleChoiceCorrectAnswer: null,
         resultsScreen: false
       });
+      this.player.seek(0);
     }
   }
 
