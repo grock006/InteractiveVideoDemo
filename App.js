@@ -44,14 +44,14 @@ const mockAPI = [
     activityId: 2,
     activityType: 'trueFalse',
     interactive: true,
-    activityStart: 26, //76,
-    interactiveScreenStart: 26, //76,
-    interactiveTargetImageStart: 26, //76,
-    interactiveButtonStart: 26, //76,
+    activityStart: 26, 
+    interactiveScreenStart: 26, 
+    interactiveTargetImageStart: 26, 
+    interactiveButtonStart: 26, 
     greenButtonHighlightStart: 28, 
     redButtonHighlightStart: 29, 
-    interactivityStart: 31, //83,
-    countdownClockStart: 31, //83,
+    interactivityStart: 31, 
+    countdownClockStart: 31, 
     interactivityDuration: 2,
     highlightCorrectAnswerStart: 33,
     highlightCorrectAnswerDuration: 3,
@@ -63,14 +63,14 @@ const mockAPI = [
     activityId: 3,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 47, //124,
-    interactiveScreenStart: 47, //124,
-    interactiveTargetImageStart: 47, //124,
-    interactiveButtonStart: 47, //124,
-    interactivityStart: 49, //127, //start speech recording //set highlight class (animation later)
-    countdownClockStart: 49, //127,
-    interactivityDuration: 3, //stop speech recording //remove highlight class
-    interactivityAnimationDuration: 3, //possibly need to trigger highlight at the right time 58
+    activityStart: 47, 
+    interactiveScreenStart: 47, 
+    interactiveTargetImageStart: 47, 
+    interactiveButtonStart: 47, 
+    interactivityStart: 50, 
+    countdownClockStart: 50, 
+    interactivityDuration: 2, 
+    interactivityAnimationDuration: 2, 
     activityEnd: 57,
     activityImages: require('./assets/images/word_play/nose.png'),
     correctAnswer: 'this is a nose',
@@ -84,10 +84,10 @@ const mockAPI = [
     interactiveScreenStart: 58,
     interactiveTargetImageStart: 58,
     interactiveButtonStart: 58,
-    interactivityStart: 60,
-    countdownClockStart: 60,
-    interactivityDuration: 3,
-    interactivityAnimationDuration: 3,
+    interactivityStart: 61,
+    countdownClockStart: 61,
+    interactivityDuration: 2,
+    interactivityAnimationDuration: 2,
     activityEnd: 67,
     activityImages: require('./assets/images/word_play/ear.png'),
     correctAnswer: 'these are ears',
@@ -101,10 +101,10 @@ const mockAPI = [
     interactiveScreenStart: 69,
     interactiveTargetImageStart: 69,
     interactiveButtonStart: 69,
-    interactivityStart: 70,
-    countdownClockStart: 70,
-    interactivityDuration: 3,
-    interactivityAnimationDuration: 3,
+    interactivityStart: 71,
+    countdownClockStart: 71,
+    interactivityDuration: 2,
+    interactivityAnimationDuration: 2,
     activityEnd: 77,
     activityImages: require('./assets/images/word_play/finger.png'),
     correctAnswer: 'these are my fingers',
@@ -114,13 +114,13 @@ const mockAPI = [
     activityId: 6,
     activityType: 'multipleChoice',
     interactive: true,
-    activityStart: 85, //207,
-    interactiveScreenStart: 85, //207,
-    interactiveTargetImageStart: 85, //207,
+    activityStart: 85, 
+    interactiveScreenStart: 85, 
+    interactiveTargetImageStart: 85, 
     interactivityStart: 87,
     countdownClockStart: 87,
     interactivityDuration: 3,
-    highlightCorrectAnswerStart: 90, //216,
+    highlightCorrectAnswerStart: 90, 
     highlightCorrectAnswerDuration: 2,
     activityEnd: 92,
     activityOptions: [
@@ -135,13 +135,13 @@ const mockAPI = [
     activityId: 7,
     activityType: 'multipleChoice',
     interactive: true,
-    activityStart: 93, //207,
-    interactiveScreenStart: 93, //207,
-    interactiveTargetImageStart: 93, //207,
+    activityStart: 93, 
+    interactiveScreenStart: 93, 
+    interactiveTargetImageStart: 93, 
     interactivityStart: 95,
     countdownClockStart: 95,
     interactivityDuration: 4,
-    highlightCorrectAnswerStart: 99, //216,
+    highlightCorrectAnswerStart: 99, 
     highlightCorrectAnswerDuration: 3,
     activityEnd: 102,
     activityOptions: [
@@ -156,13 +156,13 @@ const mockAPI = [
     activityId: 8,
     activityType: 'multipleChoice',
     interactive: true,
-    activityStart: 104, //207,
-    interactiveScreenStart: 104, //207,
-    interactiveTargetImageStart: 104, //207,
+    activityStart: 104, 
+    interactiveScreenStart: 104, 
+    interactiveTargetImageStart: 104, 
     interactivityStart: 105,
     countdownClockStart: 105,
     interactivityDuration: 5,
-    highlightCorrectAnswerStart: 110, //216,
+    highlightCorrectAnswerStart: 110, 
     highlightCorrectAnswerDuration: 2,
     activityEnd: 112,
     activityOptions: [
@@ -177,14 +177,14 @@ const mockAPI = [
     activityId: 9,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 119, //46, //124,
-    interactiveScreenStart: 119, //124,
-    interactiveTargetImageStart: 119, //124,
-    interactiveButtonStart: 119, //124,
-    interactivityStart: 121, //127, //start speech recording //set highlight class (animation later)
-    countdownClockStart: 121, //127,
-    interactivityDuration: 4, //stop speech recording //remove highlight class
-    interactivityAnimationDuration: 4, //highlight correct answer 128
+    activityStart: 119, 
+    interactiveScreenStart: 119, 
+    interactiveTargetImageStart: 119, 
+    interactiveButtonStart: 119, 
+    interactivityStart: 121, 
+    countdownClockStart: 121, 
+    interactivityDuration: 3, 
+    interactivityAnimationDuration: 3, 
     activityEnd: 131,
     activityImages: require('./assets/images/word_play/body.png'),
     correctAnswer: 'body',
@@ -194,14 +194,14 @@ const mockAPI = [
     activityId: 10,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 132, //46, //124,
-    interactiveScreenStart: 132, //124,
-    interactiveTargetImageStart: 132, //124,
-    interactiveButtonStart: 132, //124,
-    interactivityStart: 133, //127, //start speech recording //set highlight class (animation later)
-    countdownClockStart: 133, //127,
-    interactivityDuration: 4, //stop speech recording //remove highlight class
-    interactivityAnimationDuration: 4, //highlight 140
+    activityStart: 132, 
+    interactiveScreenStart: 132, 
+    interactiveTargetImageStart: 132, 
+    interactiveButtonStart: 132, 
+    interactivityStart: 133, 
+    countdownClockStart: 133, 
+    interactivityDuration: 3, 
+    interactivityAnimationDuration: 3, //highlight 140
     activityEnd: 143,
     activityImages: require('./assets/images/word_play/mouth.png'),
     correctAnswer: 'mouth',
@@ -211,14 +211,14 @@ const mockAPI = [
     activityId: 11,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 144, //46, //124,
-    interactiveScreenStart: 144, //124,
-    interactiveTargetImageStart: 144, //124,
-    interactiveButtonStart: 144, //124,
-    interactivityStart: 145, //127, //start speech recording //set highlight class (animation later)
-    countdownClockStart: 145, //127,
-    interactivityDuration: 4, //stop speech recording //remove highlight class
-    interactivityAnimationDuration: 4, //highlight 152
+    activityStart: 144, 
+    interactiveScreenStart: 144, 
+    interactiveTargetImageStart: 144, 
+    interactiveButtonStart: 144, 
+    interactivityStart: 145, 
+    countdownClockStart: 145, 
+    interactivityDuration: 3, 
+    interactivityAnimationDuration: 3, //highlight 152
     activityEnd: 155,
     activityImages: require('./assets/images/word_play/toe.png'),
     correctAnswer: 'toe',
@@ -249,9 +249,9 @@ export default class App extends Component<Props> {
      this.state = {
        ticketCounter: 0,
        countdownClock: false,
-       countdownClockSeconds: null,
+       countdownClockSeconds: 0,
        isVideoLoaded: false,
-       isPaused: this.f,
+       isPaused: this.t,
        isMuted: this.f,
        interactiveContainer: false,
        trueFalse: false,
@@ -259,7 +259,7 @@ export default class App extends Component<Props> {
        trueFalseButtonsContainer: false,
        trueFalseSelected: null,
        trueFalseCorrect: false,
-       trueFalseCheckmark: false, 
+       trueFalseCheckmark: true, 
        trueFalseCorrectAnswer: null,
        trueFalseImage: null,
        speechActivity: false,
@@ -802,8 +802,8 @@ animateSpeechActivityRecording = (iterations) => {
               }
               {this.state.trueFalseButtonsContainer && <View style={styles.trueFalseButtonsContainer}>
                 <View style={[
-                  styles.trueFalseGreenYesButtonHighlight,
-                  this.state.trueFalseSelected === 'green' ? styles.trueFalseGreenYesButtonHighlightSelected : {}
+                  styles.trueFalseHighlight,
+                  this.state.trueFalseSelected === 'green' ? styles.trueFalseHighlightSelected : {}
                   ]}>
                   <TouchableOpacity 
                     onPress={() => this._onPressTrueFalse('green')}
@@ -811,15 +811,15 @@ animateSpeechActivityRecording = (iterations) => {
                     style={styles.trueFalseGreenYesButton}>
                       {this.state.trueFalseCheckmark && (this.state.trueFalseCorrectAnswer === 'green') &&
                         <View style={styles.trueFalseCheckmarkContainer}>
-                          <Image source={require('./assets/images/checkmark.png')} />
+                          <Image style={styles.trueFalseCheckmarkIcon} source={require('./assets/images/checkmark.png')} />
                         </View>
                       }
                   </TouchableOpacity>
                 </View>
 
                 <View style={[
-                  styles.trueFalseRedNoButtonHighlight,
-                  this.state.trueFalseSelected === 'red' ? styles.trueFalseRedNoButtonHighlightSelected : {}
+                  styles.trueFalseHighlight,
+                  this.state.trueFalseSelected === 'red' ? styles.trueFalseHighlightSelected : {}
                   ]}>
                   <TouchableOpacity 
                     onPress={() => this._onPressTrueFalse('red')}
@@ -911,7 +911,7 @@ animateSpeechActivityRecording = (iterations) => {
                         <Image style={styles.multipleChoiceImage} source={option.image}  />
                         { this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === option.id) &&
                           <View style={styles.multipleChoiceCheckmarkContainer}>
-                            <Image source={require('./assets/images/green_circle_checkmark.png')} />
+                            <Image style={styles.multipleChoiceCheckmarkIcon} source={require('./assets/images/checkmark.png')} />
                           </View>
                         }
                       </View>
@@ -1006,13 +1006,13 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderWidth: 3,
     borderRadius: 50,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'rgb(36, 102, 215)',
     position: 'absolute',
     right: 120,
     top: 10
   },
   countdownClockSeconds: {
-    color: '#F0951C',
+    color: '#FFFFFF',
     fontWeight: 'bold',
     textAlign: 'center',
     fontSize: 30,
@@ -1045,112 +1045,116 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute', 
     zIndex: 2,
-    top: 60,
+    top: 55,
     right: 15, 
-    backgroundColor: 'rgba(213, 221, 234, 0.5)',
-    height: 290,
-    width: 350,
-    borderWidth: 1,
-    borderColor: '#898989',
-    borderRadius: 15,
+    backgroundColor: 'rgba(36, 102, 215, 0.2)',
+    height: 300,
+    width: 300,
+    borderWidth: 2,
+    borderColor: 'rgb(36, 102, 215)',
+    borderRadius: 10
   },
   trueFalseImageContainer: {
     zIndex: 3,
     position: 'relative',
-    height: 150,
-    width: 250,
-    marginTop: 15,
-    borderWidth: 2,
-    borderColor: '#898989',
-    borderRadius: 15,
-    backgroundColor: '#ffffff',
+    height: 165,
+    width: 165,
+    marginTop: 12,
+    borderWidth: 2, 
+    borderColor: 'rgb(36, 102, 215)',
+    borderRadius: 10,
+    backgroundColor: 'rgba(60, 123, 218, 0.5)',
     justifyContent: 'center'
   },
   trueFalseImage: {
     alignSelf: 'center',
     width: 135, 
-    height: 135
+    height: 135,
+    borderColor: '#ffffff',
+    borderWidth: 3,
+    borderRadius: 10
   },
   trueFalseButtonsContainer: {
     flexDirection: 'row',
-    marginTop: 10,
+    marginTop: 15,
     width: 270,
-    justifyContent: 'space-between'
-  },
-  trueFalseCheckmarkContainer: {
+    justifyContent: 'space-around'
   },
   trueFalseRedNoButton: {
     height: 75,
     width: 75,
     backgroundColor: '#C30016',
     borderRadius: 50,
-    borderColor: 'transparent',
-    borderWidth: 10,
     zIndex: 5,
     position: 'absolute',
     justifyContent: 'center',
-    alignItems: 'center'
-  },
-  trueFalseRedNoButtonHighlight: {
-    borderColor: 'rgba(195, 0, 22, 0.0)',
-    height: 100,
-    width: 100,
-    backgroundColor: 'transparent',
-    borderRadius: 100,
-    borderWidth: 5,
-    zIndex: 2,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  trueFalseRedNoButtonHighlightSelected: {
-    borderColor: 'rgba(195, 0, 22, 1)'
-  },
-  trueFalseDisabled: {
-    opacity: 0.4
+    alignItems: 'center',
+    borderColor: '#C30016',
+    borderWidth: 1
   },
   trueFalseGreenYesButton: {
     height: 75,
     width: 75,
     backgroundColor: '#48AA09',
     borderRadius: 50,
-    borderColor: 'transparent',
-    borderWidth: 10,
     zIndex: 5,
     position: 'absolute',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderColor: '#48AA09',
+    borderWidth: 1
   },
-  trueFalseGreenYesButtonHighlight: {
+  trueFalseHighlight: {
     borderColor: 'transparent',
-    height: 100,
-    width: 100,
+    height: 90,
+    width: 90,
     backgroundColor: 'transparent',
     borderRadius: 100,
-    borderWidth: 5,
+    borderWidth: 10,
     zIndex: 2,
     justifyContent: 'center',
     alignItems: 'center'
   },
-  trueFalseGreenYesButtonHighlightSelected: {
-    borderColor: '#48AA09'
+  trueFalseHighlightSelected: {
+    borderColor: 'rgb(240, 149, 28)'
+  },
+  trueFalseCheckmarkContainer: {
+    position: 'absolute',
+    bottom: -10,
+    right: -10,
+    backgroundColor: '#48AA09',
+    height: 40,
+    width: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderColor: '#ffffff',
+    borderWidth: 3
+  },
+  trueFalseCheckmarkIcon: {
+    height: 23,
+    width: 30
   },
   speechActivityImageContainer: {
     zIndex: 3,
     position: 'relative',
-    height: 140,
-    width: 240,
-    marginTop: 15,
-    borderWidth: 2,
-    borderColor: '#898989',
-    borderRadius: 15,
-    backgroundColor: '#ffffff',
+    height: 165,
+    width: 165,
+    marginTop: 12,
+    borderWidth: 2, 
+    borderColor: 'rgb(36, 102, 215)',
+    borderRadius: 10,
+    backgroundColor: 'rgba(60, 123, 218, 0.5)',
     justifyContent: 'center',
     alignItems: 'center'
   },
   speechActivityImage: {
-    height: 120,
-    width: 120,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    width: 135, 
+    height: 135,
+    borderColor: '#ffffff',
+    borderWidth: 3,
+    borderRadius: 10
   },
   speechActivityIconContainer: {
     width: 90,
@@ -1161,11 +1165,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(47, 154, 224)',
     borderRadius: 100,
     alignItems: 'center',
-    justifyContent: 'center'
-  },
-  speechActivityIcon: {
-    // width: 50,
-    // height: 50
+    justifyContent: 'center',
+    borderColor: 'rgb(47, 154, 224)',
+    borderWidth: 1
   },
   speechActivityRecordingLeftOne: {
     top: 40, 
@@ -1229,32 +1231,49 @@ const styles = StyleSheet.create({
     zIndex: 3,
     position: 'relative',
     height: 130,
-    width: 160,
-    borderWidth: 2,
-    borderColor: '#898989',
-    borderRadius: 15,
-    backgroundColor: '#ffffff',
+    width: 130,
     marginTop: 5,
     marginBottom: 5,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderWidth: 2, 
+    borderColor: 'rgb(36, 102, 215)',
+    borderRadius: 10,
+    backgroundColor: 'rgba(60, 123, 218, 0.5)',
   },
   multipleChoiceCheckmarkContainer: {
     position: 'absolute',
-    top: 5,
-    left: 5
+    bottom: -7,
+    right: -7,
+    backgroundColor: '#48AA09',
+    height: 40,
+    width: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderColor: '#ffffff',
+    borderWidth: 3
+  },
+  multipleChoiceCheckmarkIcon: {
+    height: 23,
+    width: 30
   },
   multipleChoiceImageContainerSelected: {
     borderWidth: 10, 
-    borderColor: 'rgb(242, 157, 48)'
+    borderColor: 'rgb(240, 149, 28)',
+    backgroundColor: 'rgb(240, 149, 28)'
   },
   multipleChoiceImageContainerCorrect: {
     borderWidth: 10, 
-    borderColor: '#48AA09'
+    borderColor: '#48AA09',
+    backgroundColor: '#48AA09'
   },
   multipleChoiceImage: {
     alignSelf: 'center',
-    height: 115,
-    width: 115
+    height: 110,
+    width: 110,
+    borderColor: '#ffffff',
+    borderWidth: 3,
+    borderRadius: 10
   }
 });
