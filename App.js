@@ -229,19 +229,19 @@ const mockAPI = [
     activityType: 'resultsScreen',
     interactive: false,
     resultsScreenStart: 156,
-    resultsScreenEnd: 158,
+    resultsScreenDuration: 10,
     resultsScreenOptions: [
-      {id: 1, answerCorrect: null, image:require('./assets/images/word_play/eyes.png')},
-      {id: 2, answerCorrect: null, image:require('./assets/images/word_play/fingers.png')},
-      {id: 3, answerCorrect: null, image:require('./assets/images/word_play/nose.png')},
-      {id: 4, answerCorrect: null, image:require('./assets/images/word_play/ear.png')},
-      {id: 5, answerCorrect: null, image:require('./assets/images/word_play/finger.png')},
-      {id: 6, answerCorrect: null, image:require('./assets/images/word_play/foot.png')},
-      {id: 7, answerCorrect: null, image:require('./assets/images/word_play/feet.png')},
-      {id: 8, answerCorrect: null, image:require('./assets/images/word_play/knee.png')},
-      {id: 9, answerCorrect: null, image:require('./assets/images/word_play/body.png')},
-      {id: 10, answerCorrect: null, image:require('./assets/images/word_play/mouth.png')},
-      {id: 11, answerCorrect: null, image:require('./assets/images/word_play/toe.png')}
+      {id: 1, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/eyes.png')},
+      {id: 2, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/fingers.png')},
+      {id: 3, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/nose.png')},
+      {id: 4, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/ear.png')},
+      {id: 5, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/finger.png')},
+      {id: 6, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/foot.png')},
+      {id: 7, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/feet.png')},
+      {id: 8, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/knee.png')},
+      {id: 9, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/body.png')},
+      {id: 10, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/mouth.png')},
+      {id: 11, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/toe.png')}
     ]
   }
 ];
@@ -301,20 +301,9 @@ export default class App extends Component<Props> {
        multipleChoiceOptions: [],
        multipleChoiceCheckmark: false,
        multipleChoiceCorrectAnswer: null,
-       resultsScreen: true,
-       resultsScreenOptions: [
-        {id: 1, isSpeechActivity: false, answerCorrect: true, image:require('./assets/images/word_play/eyes.png')},
-        {id: 2, isSpeechActivity: false, answerCorrect: true, image:require('./assets/images/word_play/fingers.png')},
-        {id: 3, isSpeechActivity: true, answerCorrect: false, image:require('./assets/images/word_play/nose.png')},
-        {id: 4, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/ear.png')},
-        {id: 5, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/finger.png')},
-        {id: 6, isSpeechActivity: false, answerCorrect: false, image:require('./assets/images/word_play/foot.png')},
-        {id: 7, isSpeechActivity: false, answerCorrect: true, image:require('./assets/images/word_play/feet.png')},
-        {id: 8, isSpeechActivity: false, answerCorrect: true, image:require('./assets/images/word_play/knee.png')},
-        {id: 9, isSpeechActivity: true, answerCorrect: false, image:require('./assets/images/word_play/body.png')},
-        {id: 10, isSpeechActivity: true, answerCorrect: false, image:require('./assets/images/word_play/mouth.png')},
-        {id: 11, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/toe.png')}
-      ]
+       resultsScreen: false,
+       resultsScreenOptions: [],
+       resultsScreenFinalScores: []
      }
   }
 
@@ -341,6 +330,51 @@ export default class App extends Component<Props> {
       ticketCounter: prevState.ticketCounter + 1
     }));
   };
+
+  _setResultsScreen = (mockAPI) => {
+    if(mockAPI.activityType === 'resultsScreen') {
+      let resultsScreenOptions = this._checkFinalScoring(mockAPI.resultsScreenOptions);
+      this.setState({
+        resultsScreen: true,
+        resultsScreenOptions: resultsScreenOptions
+      });
+
+      this.clearResultsScreenTimeout = setTimeout(
+        () => {
+          this.setState({
+            resultsScreen: false,
+            resultsScreenOptions: []
+          });
+          clearTimeout(this.clearResultsScreenTimeout);
+        }, mockAPI.resultsScreenDuration * 1000
+      );
+    }
+  }
+
+
+  _checkFinalScoring = (resultsScreenOptions) => {
+    let resultsScreenOptionsArr = resultsScreenOptions;
+    let resultsScreenFinalScores = this.state.resultsScreenFinalScores;
+
+    resultsScreenOptionsArr.forEach((resultsScreenOption) => {
+      resultsScreenFinalScores.forEach((finalScore) => {
+        if (resultsScreenOption.id === finalScore.id) {
+          resultsScreenOption.isSpeechActivity = finalScore.activityType === 'speechActivity' ? true : false;
+          resultsScreenOption.answerCorrect = finalScore.answerCorrect;
+        }
+      });
+    });
+    return resultsScreenOptionsArr;
+  }
+
+  _setResultsScreenFinalScore = (activityId, activityType, answerCorrect) => {
+    let resultsScreenFinalObj = {id: activityId, activityType: activityType, answerCorrect: answerCorrect}
+    let resultsScreenArr = this.state.resultsScreenFinalScores;
+    resultsScreenArr.push(resultsScreenFinalObj);
+    this.setState({
+      resultsScreenFinalScores: resultsScreenArr
+    })
+  }
 
   _setActivityEnd = (activityType) => {
     if (activityType === 'trueFalse') {
@@ -385,7 +419,10 @@ export default class App extends Component<Props> {
     }
   };
 
-  _checkAnswer = (correctAnswer, activityType) => {
+  _checkAnswer = (mockAPI) => {
+    let correctAnswer = mockAPI.correctAnswer;
+    let activityType = mockAPI.activityType;
+ 
     if (activityType === 'trueFalse') {
       this.setState({
         trueFalseCorrectAnswer: correctAnswer
@@ -393,8 +430,10 @@ export default class App extends Component<Props> {
       if (correctAnswer === this.state.trueFalseSelected) {
         correctAnswerSfx.play();
         this.incrementTicketCounter();
+        this._setResultsScreenFinalScore(mockAPI.activityId, activityType, true)
       } else {
         incorrectAnswerSfx.play();
+        this._setResultsScreenFinalScore(mockAPI.activityId, activityType, false)
       }
     }
     if (activityType === 'multipleChoice') {
@@ -404,24 +443,28 @@ export default class App extends Component<Props> {
       if (correctAnswer === this.state.multipleChoiceSelected) {
         correctAnswerSfx.play();
         this.incrementTicketCounter();
+        this._setResultsScreenFinalScore(mockAPI.activityId, activityType, true)
       } else {
         incorrectAnswerSfx.play();
+        this._setResultsScreenFinalScore(mockAPI.activityId, activityType, false)
       }
     } 
   };
 
-  _checkSpeechActivityAnswer = (speechScore) => {
+  _checkSpeechActivityAnswer = (speechScore, activityId) => {
     if (parseFloat(speechScore, 10) >= 0.5) {
       this.setState({
         speechActivityProcessing: false,
         speechActivityCorrectAnswer: true
       });
       this.incrementTicketCounter();
+      this._setResultsScreenFinalScore(activityId, 'speechActivity', true);
     } else {
       this.setState({
         speechActivityProcessing: false,
         speechActivityIncorrectAnswer: true
       });
+      this._setResultsScreenFinalScore(activityId, 'speechActivity', false);
     }
   }
 
@@ -659,10 +702,10 @@ animateSpeechActivityRecording = (iterations) => {
         speechActivityScore: responseJson.score,
         speechActivityProcessing: false
       })
-      this._checkSpeechActivityAnswer(responseJson.score, 'speechActivity')
+      this._checkSpeechActivityAnswer(responseJson.score, apiObject.activityId);
     })
     .catch((error) => {
-      this._checkSpeechActivityAnswer('0', 'speechActivity')
+      this._checkSpeechActivityAnswer('0', apiObject.activityId);
     })
   }
 
@@ -677,7 +720,7 @@ animateSpeechActivityRecording = (iterations) => {
     this.setState({
       isVideoLoaded: true
     });
-    this.player.seek(12);
+    //this.player.seek(12);
   };
 
     _onPressReloadVideo = () => {
@@ -717,7 +760,9 @@ animateSpeechActivityRecording = (iterations) => {
         multipleChoiceOptions: [],
         multipleChoiceCheckmark: false,
         multipleChoiceCorrectAnswer: null,
-        resultsScreen: false
+        resultsScreen: false,
+        resultsScreenOptions: [],
+        resultsScreenFinalScores: []
       });
       this.player.seek(0);
     }
@@ -725,7 +770,7 @@ animateSpeechActivityRecording = (iterations) => {
 
   _onVideoProgress = (status) => {
     if (this.state.isVideoLoaded) {
-      //this._playInteractiveSequence(status)
+      this._playInteractiveSequence(status)
     }
   };
 
@@ -776,7 +821,7 @@ animateSpeechActivityRecording = (iterations) => {
         // highlightCorrectAnswerDuration: 3, //duration to highlight correct answer
         // check correctAnswer: 'red' //correct answer to the activity question
         if (currentTime === mockAPI.highlightCorrectAnswerStart ) {
-          this._checkAnswer(mockAPI.correctAnswer, mockAPI.activityType);
+          this._checkAnswer(mockAPI);
           this._setHighlightCorrectAnswer(true, mockAPI.activityType, mockAPI.highlightCorrectAnswerDuration);
         }
         
@@ -791,6 +836,9 @@ animateSpeechActivityRecording = (iterations) => {
         // resultsScreenStart: 156,
         // resultsScreenEnd: 158,
         // resultsScreenOptions: 
+        if (currentTime === mockAPI.resultsScreenStart) {
+          this._setResultsScreen(mockAPI);
+        }
 
       });
     }
