@@ -31,8 +31,8 @@ const mockAPI = [
     interactiveButtonStart: 12,//10, //54, //time to display interactive buttons, non-clickable, could also be microphone
     greenButtonHighlightStart: 15, //58, //time to display green button highlight
     redButtonHighlightStart: 16, //59, //time to display red button highlight
-    interactivityStart: 18, //60, //time to allow user interactivity, start countdown clock 
-    countdownClockStart: 18, //60, //time to display clock countdown, should be same as interactivityStart
+    interactivityStart: 17, //60, //time to allow user interactivity, start countdown clock 
+    countdownClockStart: 17, //60, //time to display clock countdown, should be same as interactivityStart
     interactivityDuration: 3, //total time for user interactivity, can use instead of countdown duration
     highlightCorrectAnswerStart: 21, //time to highlight correct answer
     highlightCorrectAnswerDuration: 3, //duration to highlight correct answer
@@ -50,9 +50,9 @@ const mockAPI = [
     interactiveButtonStart: 26, 
     greenButtonHighlightStart: 28, 
     redButtonHighlightStart: 29, 
-    interactivityStart: 31, 
-    countdownClockStart: 31, 
-    interactivityDuration: 2,
+    interactivityStart: 30, 
+    countdownClockStart: 30, 
+    interactivityDuration: 3,
     highlightCorrectAnswerStart: 33,
     highlightCorrectAnswerDuration: 3,
     activityEnd: 36,
@@ -69,9 +69,11 @@ const mockAPI = [
     interactiveButtonStart: 47, 
     interactivityStart: 50, 
     countdownClockStart: 50, 
-    interactivityDuration: 2, 
-    interactivityAnimationDuration: 2, 
-    activityEnd: 57,
+    interactivityDuration: 3, 
+    interactivityAnimationDuration: 3,
+    highlightCorrectAnswerStart: 56,
+    highlightCorrectAnswerDuration: 1,
+    activityEnd: 58,
     activityImages: require('./assets/images/word_play/nose.png'),
     correctAnswer: 'this is a nose',
     pcmFileName: 'nose'
@@ -84,10 +86,12 @@ const mockAPI = [
     interactiveScreenStart: 58,
     interactiveTargetImageStart: 58,
     interactiveButtonStart: 58,
-    interactivityStart: 61,
-    countdownClockStart: 61,
-    interactivityDuration: 2,
-    interactivityAnimationDuration: 2,
+    interactivityStart: 60,
+    countdownClockStart: 60,
+    interactivityDuration: 3,
+    interactivityAnimationDuration: 3,
+    highlightCorrectAnswerStart: 66,
+    highlightCorrectAnswerDuration: 1,
     activityEnd: 67,
     activityImages: require('./assets/images/word_play/ear.png'),
     correctAnswer: 'these are ears',
@@ -97,15 +101,17 @@ const mockAPI = [
     activityId: 5,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 69,
-    interactiveScreenStart: 69,
-    interactiveTargetImageStart: 69,
-    interactiveButtonStart: 69,
-    interactivityStart: 71,
-    countdownClockStart: 71,
-    interactivityDuration: 2,
-    interactivityAnimationDuration: 2,
-    activityEnd: 77,
+    activityStart: 68,
+    interactiveScreenStart: 68,
+    interactiveTargetImageStart: 68,
+    interactiveButtonStart: 68,
+    interactivityStart: 70,
+    countdownClockStart: 70,
+    interactivityDuration: 3,
+    interactivityAnimationDuration: 3,
+    highlightCorrectAnswerStart: 76,
+    highlightCorrectAnswerDuration: 2,
+    activityEnd: 78,
     activityImages: require('./assets/images/word_play/finger.png'),
     correctAnswer: 'these are my fingers',
     pcmFileName: 'fingers'
@@ -117,8 +123,8 @@ const mockAPI = [
     activityStart: 85, 
     interactiveScreenStart: 85, 
     interactiveTargetImageStart: 85, 
-    interactivityStart: 87,
-    countdownClockStart: 87,
+    interactivityStart: 86,
+    countdownClockStart: 86,
     interactivityDuration: 3,
     highlightCorrectAnswerStart: 90, 
     highlightCorrectAnswerDuration: 2,
@@ -138,8 +144,8 @@ const mockAPI = [
     activityStart: 93, 
     interactiveScreenStart: 93, 
     interactiveTargetImageStart: 93, 
-    interactivityStart: 95,
-    countdownClockStart: 95,
+    interactivityStart: 94,
+    countdownClockStart: 94,
     interactivityDuration: 4,
     highlightCorrectAnswerStart: 99, 
     highlightCorrectAnswerDuration: 3,
@@ -161,7 +167,7 @@ const mockAPI = [
     interactiveTargetImageStart: 104, 
     interactivityStart: 105,
     countdownClockStart: 105,
-    interactivityDuration: 5,
+    interactivityDuration: 4,
     highlightCorrectAnswerStart: 110, 
     highlightCorrectAnswerDuration: 2,
     activityEnd: 112,
@@ -185,6 +191,8 @@ const mockAPI = [
     countdownClockStart: 121, 
     interactivityDuration: 3, 
     interactivityAnimationDuration: 3, 
+    highlightCorrectAnswerStart: 128,
+    highlightCorrectAnswerDuration: 3,
     activityEnd: 131,
     activityImages: require('./assets/images/word_play/body.png'),
     correctAnswer: 'body',
@@ -201,7 +209,9 @@ const mockAPI = [
     interactivityStart: 133, 
     countdownClockStart: 133, 
     interactivityDuration: 3, 
-    interactivityAnimationDuration: 3, //highlight 140
+    interactivityAnimationDuration: 3, 
+    highlightCorrectAnswerStart: 140,
+    highlightCorrectAnswerDuration: 3,
     activityEnd: 143,
     activityImages: require('./assets/images/word_play/mouth.png'),
     correctAnswer: 'mouth',
@@ -218,7 +228,9 @@ const mockAPI = [
     interactivityStart: 145, 
     countdownClockStart: 145, 
     interactivityDuration: 3, 
-    interactivityAnimationDuration: 3, //highlight 152
+    interactivityAnimationDuration: 3, 
+    highlightCorrectAnswerStart: 152,
+    highlightCorrectAnswerDuration: 3,
     activityEnd: 155,
     activityImages: require('./assets/images/word_play/toe.png'),
     correctAnswer: 'toe',
@@ -271,7 +283,7 @@ export default class App extends Component<Props> {
        countdownClock: false,
        countdownClockSeconds: 0,
        isVideoLoaded: false,
-       isPaused: this.t,
+       isPaused: this.f,
        isMuted: this.f,
        interactiveContainer: false,
        trueFalse: false,
@@ -420,6 +432,7 @@ export default class App extends Component<Props> {
   };
 
   _checkAnswer = (mockAPI) => {
+    let activityId = mockAPI.activityId;
     let correctAnswer = mockAPI.correctAnswer;
     let activityType = mockAPI.activityType;
  
@@ -443,30 +456,26 @@ export default class App extends Component<Props> {
       if (correctAnswer === this.state.multipleChoiceSelected) {
         correctAnswerSfx.play();
         this.incrementTicketCounter();
-        this._setResultsScreenFinalScore(mockAPI.activityId, activityType, true)
+        this._setResultsScreenFinalScore(activityId, activityType, true)
       } else {
         incorrectAnswerSfx.play();
-        this._setResultsScreenFinalScore(mockAPI.activityId, activityType, false)
+        this._setResultsScreenFinalScore(activityId, activityType, false)
+      }
+    }
+    if (activityType === 'speechActivity') {
+      if (parseFloat(this.state.speechActivityScore, 10) >= 0.5) {
+        this.setState({
+          speechActivityCorrectAnswer: true
+        });
+        this._setResultsScreenFinalScore(activityId, activityType, true)
+      } else {
+        this.setState({
+          speechActivityIncorrectAnswer: true
+        });
+        this._setResultsScreenFinalScore(activityId, activityType, false)
       }
     } 
   };
-
-  _checkSpeechActivityAnswer = (speechScore, activityId) => {
-    if (parseFloat(speechScore, 10) >= 0.5) {
-      this.setState({
-        speechActivityProcessing: false,
-        speechActivityCorrectAnswer: true
-      });
-      this.incrementTicketCounter();
-      this._setResultsScreenFinalScore(activityId, 'speechActivity', true);
-    } else {
-      this.setState({
-        speechActivityProcessing: false,
-        speechActivityIncorrectAnswer: true
-      });
-      this._setResultsScreenFinalScore(activityId, 'speechActivity', false);
-    }
-  }
 
   _setHighlightCorrectAnswer = (boolean, activityType, highlightCorrectAnswerDuration) => {
     if (activityType === 'trueFalse') {
@@ -478,6 +487,14 @@ export default class App extends Component<Props> {
       this.setState({
         multipleChoiceCheckmark: boolean
       });
+    };
+    if (activityType === 'speechActivity') {
+      this.setState({
+        speechActivityProcessing: false,
+      });
+      if (this.state.speechActivityCorrectAnswer) {
+        this.incrementTicketCounter();
+      }
     }
 
     this.highlightCorrectAnswerTimeout = setTimeout(
@@ -493,9 +510,12 @@ export default class App extends Component<Props> {
     this._setCountdownClockSeconds(mockAPI.interactivityDuration);
     this.countdownClockInterval = setInterval(
       () => {
-        this.countdownClock()
-        if(this.state.countdownClockSeconds < 0) {
+        if (this.state.countdownClockSeconds > 0) {
+          this.countdownClock();
+        }
+        if (this.state.countdownClockSeconds === 0) {
           clearInterval(this.countdownClockInterval);
+          countdownTimerEndSfx.play();
           this._stopInteractivity(mockAPI);
           this._setCountdownClockDisplay(false);
         }
@@ -516,6 +536,9 @@ export default class App extends Component<Props> {
   };
 
   _setInteractiveContainerDisplay = (boolean) => {
+    if (boolean) {
+      interactiveScreenSlideInSfx.play()
+    }
     this.setState({
       interactiveContainer: boolean
     });
@@ -698,14 +721,16 @@ animateSpeechActivityRecording = (iterations) => {
     })
     .then((response) => response.json())
     .then((responseJson) => {
+      console.log('responseJson good', responseJson)
       this.setState({
         speechActivityScore: responseJson.score,
-        speechActivityProcessing: false
       })
-      this._checkSpeechActivityAnswer(responseJson.score, apiObject.activityId);
     })
     .catch((error) => {
-      this._checkSpeechActivityAnswer('0', apiObject.activityId);
+      console.log('responseJson error', error)
+      this.setState({
+        speechActivityScore: 0,
+      })
     })
   }
 
@@ -830,12 +855,7 @@ animateSpeechActivityRecording = (iterations) => {
           this._setActivityEnd(mockAPI.activityType);
         }
 
-
-        // activityType: 'resultsScreen',
-        // interactive: false,
-        // resultsScreenStart: 156,
-        // resultsScreenEnd: 158,
-        // resultsScreenOptions: 
+        // resultsScreenDuration: 10,
         if (currentTime === mockAPI.resultsScreenStart) {
           this._setResultsScreen(mockAPI);
         }
@@ -962,10 +982,10 @@ animateSpeechActivityRecording = (iterations) => {
                            <Image style={styles.speechActivityIcon} source={require('./assets/images/tencent_microphone_sm.png')} />
                           </View>
                         }
-                        {this.state.speechActivityCorrectAnswer && !this.state.countdownClock &&
+                        {!this.state.speechActivityProcessing && this.state.speechActivityCorrectAnswer && !this.state.countdownClock &&
                           <Image style={styles.speechActivityIcon} source={require('./assets/images/happy_star.png')} />
                         }
-                        {this.state.speechActivityIncorrectAnswer && !this.state.countdownClock &&
+                        {!this.state.speechActivityProcessing && this.state.speechActivityIncorrectAnswer && !this.state.countdownClock &&
                           <Image style={styles.speechActivityIcon} source={require('./assets/images/sad_star_blue.png')} />
                         }
 
