@@ -1125,12 +1125,12 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }, 
   resultsScreenSpeechActivityImage: {
-    height: 35,
-    width: 35
+    height: 45,
+    width: 45
   }, 
   resultsScreenSpeechActivityIconContainer: {
-    width: 40,
-    height: 40,
+    width: 25,
+    height: 25,
     alignSelf: 'center',
     marginTop: 5,
     backgroundColor: 'rgb(47, 154, 224)',
@@ -1141,8 +1141,8 @@ const styles = StyleSheet.create({
     borderWidth: 1
   }, 
   resultsScreenSpeechActivityIcon: {
-    height: 30,
-    width: 19
+    height: 22,
+    width: 14
   },
   resultsScreenTicketIconContainer: {
     position: 'absolute',
