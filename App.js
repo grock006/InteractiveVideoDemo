@@ -223,6 +223,26 @@ const mockAPI = [
     activityImages: require('./assets/images/word_play/toe.png'),
     correctAnswer: 'toe',
     pcmFileName: 'toe'
+  },
+  {
+    activityId: 12,
+    activityType: 'resultsScreen',
+    interactive: false,
+    resultsScreenStart: 156,
+    resultsScreenEnd: 158,
+    resultsScreenOptions: [
+      {id: 1, answerCorrect: null, image:require('./assets/images/word_play/eyes.png')},
+      {id: 2, answerCorrect: null, image:require('./assets/images/word_play/fingers.png')},
+      {id: 3, answerCorrect: null, image:require('./assets/images/word_play/nose.png')},
+      {id: 4, answerCorrect: null, image:require('./assets/images/word_play/ear.png')},
+      {id: 5, answerCorrect: null, image:require('./assets/images/word_play/finger.png')},
+      {id: 6, answerCorrect: null, image:require('./assets/images/word_play/foot.png')},
+      {id: 7, answerCorrect: null, image:require('./assets/images/word_play/feet.png')},
+      {id: 8, answerCorrect: null, image:require('./assets/images/word_play/knee.png')},
+      {id: 9, answerCorrect: null, image:require('./assets/images/word_play/body.png')},
+      {id: 10, answerCorrect: null, image:require('./assets/images/word_play/mouth.png')},
+      {id: 11, answerCorrect: null, image:require('./assets/images/word_play/toe.png')}
+    ]
   }
 ];
 
@@ -281,7 +301,20 @@ export default class App extends Component<Props> {
        multipleChoiceOptions: [],
        multipleChoiceCheckmark: false,
        multipleChoiceCorrectAnswer: null,
-       resultsScreen: false
+       resultsScreen: true,
+       resultsScreenOptions: [
+        {id: 1, isSpeechActivity: false, answerCorrect: true, image:require('./assets/images/word_play/eyes.png')},
+        {id: 2, isSpeechActivity: false, answerCorrect: true, image:require('./assets/images/word_play/fingers.png')},
+        {id: 3, isSpeechActivity: true, answerCorrect: false, image:require('./assets/images/word_play/nose.png')},
+        {id: 4, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/ear.png')},
+        {id: 5, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/finger.png')},
+        {id: 6, isSpeechActivity: false, answerCorrect: false, image:require('./assets/images/word_play/foot.png')},
+        {id: 7, isSpeechActivity: false, answerCorrect: true, image:require('./assets/images/word_play/feet.png')},
+        {id: 8, isSpeechActivity: false, answerCorrect: true, image:require('./assets/images/word_play/knee.png')},
+        {id: 9, isSpeechActivity: true, answerCorrect: false, image:require('./assets/images/word_play/body.png')},
+        {id: 10, isSpeechActivity: true, answerCorrect: false, image:require('./assets/images/word_play/mouth.png')},
+        {id: 11, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/toe.png')}
+      ]
      }
   }
 
@@ -644,6 +677,7 @@ animateSpeechActivityRecording = (iterations) => {
     this.setState({
       isVideoLoaded: true
     });
+    this.player.seek(12);
   };
 
     _onPressReloadVideo = () => {
@@ -691,7 +725,7 @@ animateSpeechActivityRecording = (iterations) => {
 
   _onVideoProgress = (status) => {
     if (this.state.isVideoLoaded) {
-      this._playInteractiveSequence(status)
+      //this._playInteractiveSequence(status)
     }
   };
 
@@ -750,6 +784,13 @@ animateSpeechActivityRecording = (iterations) => {
         if (currentTime === mockAPI.activityEnd ) {
           this._setActivityEnd(mockAPI.activityType);
         }
+
+
+        // activityType: 'resultsScreen',
+        // interactive: false,
+        // resultsScreenStart: 156,
+        // resultsScreenEnd: 158,
+        // resultsScreenOptions: 
 
       });
     }
@@ -923,7 +964,29 @@ animateSpeechActivityRecording = (iterations) => {
 
           {this.state.resultsScreen &&
             <View style={styles.resultsScreen}>
-              <Text style={styles.resultsScreenText}>Unit Review Scorecard</Text>
+              {this.state.resultsScreenOptions.map((result, index) => {
+                return(
+                  <View key={index} style={styles.resultsScreenImageContainer}>
+                    {!result.isSpeechActivity &&
+                      <Image style={styles.resultsScreenImage} source={result.image} />
+                    }
+                    {result.isSpeechActivity && 
+                      <View style={styles.resultsScreenSpeechActivityContainer}>
+                        <Image style={styles.resultsScreenSpeechActivityImage} source={result.image} />
+                        <View style={styles.resultsScreenSpeechActivityIconContainer}>
+                          <Image style={styles.resultsScreenSpeechActivityIcon} source={require('./assets/images/tencent_microphone_sm.png')} />
+                        </View>
+                      </View>
+                    }
+                    {result.answerCorrect &&
+                      <View style={styles.resultsScreenTicketIconContainer}>
+                        <Text style={styles.resultsScreenTicketIconText}>+1</Text>
+                      </View>
+                    }
+                  </View>
+                )
+              })}
+
             </View>
           }
         
@@ -1024,20 +1087,77 @@ const styles = StyleSheet.create({
   },
   resultsScreen: {
     zIndex: 2,
-    backgroundColor: 'rgb(213, 221, 234)',
-    height: 280,
-    width: 450,
-    borderWidth: 5,
+    backgroundColor: 'rgba(36, 102, 215, 0.2)',
+    height: 300,
+    width: 630,
+    borderWidth: 2,
     borderColor: 'rgb(60, 123, 218)',
-    borderRadius: 15,
+    borderRadius: 10,
+    marginTop: 55,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignSelf: 'center',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingTop: 20,
+    paddingRight: 10,
+    paddingLeft: 10
+  },
+  resultsScreenImageContainer: {
+    height: 90,
+    width: 90,
+    borderColor: 'rgb(36, 102, 215)',
+    borderWidth: 2,
+    borderRadius: 10,
+    marginTop: 20,
+    marginRight: 5,
+    marginBottom: 20,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    position: 'relative'
+  },
+  resultsScreenImage: {
+    height: 75,
+    width: 75,
     alignSelf: 'center'
   },
-  resultsScreenText: {
+  resultsScreenSpeechActivityContainer: {
+    alignItems: 'center'
+  }, 
+  resultsScreenSpeechActivityImage: {
+    height: 35,
+    width: 35
+  }, 
+  resultsScreenSpeechActivityIconContainer: {
+    width: 40,
+    height: 40,
     alignSelf: 'center',
-    color: '#001A66',
-    fontWeight: 'bold',
-    fontSize: 20,
-    marginTop: 20
+    marginTop: 5,
+    backgroundColor: 'rgb(47, 154, 224)',
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: 'rgb(47, 154, 224)',
+    borderWidth: 1
+  }, 
+  resultsScreenSpeechActivityIcon: {
+    height: 30,
+    width: 19
+  },
+  resultsScreenTicketIconContainer: {
+    position: 'absolute',
+    top: 5,
+    right: -10,
+    width: 25,
+    height: 25,
+    backgroundColor: 'rgb(250, 55, 33)',
+    borderRadius: 3,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  resultsScreenTicketIconText: {
+    color: 'rgb(254, 236, 54)',
+    fontWeight: '700'
   },
   interactiveContainer: {
     flex: 1,
