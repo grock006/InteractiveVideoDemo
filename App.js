@@ -13,10 +13,11 @@ import {
   Easing
 } from 'react-native';
 import Video from 'react-native-video';
+import videoSRC from './assets/videos/video_031218.mp4'
 import Orientation from 'react-native-orientation';
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
 import Sound from 'react-native-sound';
-import videoSRC from './assets/videos/video_030918.mp4'
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 
@@ -25,18 +26,18 @@ const mockAPI = [
     activityId: 1,
     activityType: 'trueFalse',
     interactive: true,
-    activityStart: 12,//10,//54, //time to start interactive segment within overall video, in seconds
-    interactiveScreenStart: 12,//10, //54, //time to display interactive screen
-    interactiveTargetImageStart: 12,//10, //54, //time to display activity target image or images
-    interactiveButtonStart: 12,//10, //54, //time to display interactive buttons, non-clickable, could also be microphone
-    greenButtonHighlightStart: 15, //58, //time to display green button highlight
-    redButtonHighlightStart: 16, //59, //time to display red button highlight
-    interactivityStart: 17, //60, //time to allow user interactivity, start countdown clock 
-    countdownClockStart: 17, //60, //time to display clock countdown, should be same as interactivityStart
-    interactivityDuration: 3, //total time for user interactivity, can use instead of countdown duration
-    highlightCorrectAnswerStart: 21, //time to highlight correct answer
-    highlightCorrectAnswerDuration: 3, //duration to highlight correct answer
-    activityEnd: 24, //time to end all activity screens
+    activityStart: 12,//time to start interactive segment within overall video, in seconds
+    interactiveScreenStart: 12,//time to display interactive screen
+    interactiveTargetImageStart: 12,//time to display activity target image or images
+    interactiveButtonStart: 12,//time to display interactive buttons, non-clickable, could also be microphone
+    greenButtonHighlightStart: 15, //time to display green button highlight
+    redButtonHighlightStart: 16,//time to display red button highlight
+    interactivityStart: 18,//time to allow user interactivity, start countdown clock 
+    countdownClockStart: 18,//time to display clock countdown, should be same as interactivityStart
+    interactivityDuration: 3,//total time for user interactivity, can use instead of countdown duration
+    highlightCorrectAnswerStart: 22,//time to highlight correct answer
+    highlightCorrectAnswerDuration: 2,//duration to highlight correct answer
+    activityEnd: 24,//time to end all activity screens
     activityImages: require('./assets/images/word_play/eyes.png'), //image assets, target images, interactive icons, etc.
     correctAnswer: 'green' //correct answer to the activity question//
   },
@@ -53,8 +54,8 @@ const mockAPI = [
     interactivityStart: 30, 
     countdownClockStart: 30, 
     interactivityDuration: 3,
-    highlightCorrectAnswerStart: 33,
-    highlightCorrectAnswerDuration: 3,
+    highlightCorrectAnswerStart: 34,
+    highlightCorrectAnswerDuration: 2,
     activityEnd: 36,
     activityImages: require('./assets/images/word_play/fingers.png'),
     correctAnswer: 'red'
@@ -75,7 +76,7 @@ const mockAPI = [
     highlightCorrectAnswerDuration: 1,
     activityEnd: 58,
     activityImages: require('./assets/images/word_play/nose.png'),
-    correctAnswer: 'this is a nose',
+    correctAnswer: 'nose',
     pcmFileName: 'nose'
   },
   {
@@ -94,7 +95,7 @@ const mockAPI = [
     highlightCorrectAnswerDuration: 1,
     activityEnd: 67,
     activityImages: require('./assets/images/word_play/ear.png'),
-    correctAnswer: 'these are ears',
+    correctAnswer: 'ears',
     pcmFileName: 'ears'
   },
   {
@@ -109,11 +110,11 @@ const mockAPI = [
     countdownClockStart: 70,
     interactivityDuration: 3,
     interactivityAnimationDuration: 3,
-    highlightCorrectAnswerStart: 75,
-    highlightCorrectAnswerDuration: 2,
+    highlightCorrectAnswerStart: 76,
+    highlightCorrectAnswerDuration: 1,
     activityEnd: 77, 
     activityImages: require('./assets/images/word_play/finger.png'),
-    correctAnswer: 'these are my fingers',
+    correctAnswer: 'fingers',
     pcmFileName: 'fingers'
   },
   {
@@ -144,9 +145,9 @@ const mockAPI = [
     activityStart: 93, 
     interactiveScreenStart: 93, 
     interactiveTargetImageStart: 93, 
-    interactivityStart: 94,
-    countdownClockStart: 94,
-    interactivityDuration: 4,
+    interactivityStart: 95,
+    countdownClockStart: 95,
+    interactivityDuration: 3,
     highlightCorrectAnswerStart: 99, 
     highlightCorrectAnswerDuration: 3,
     activityEnd: 102,
@@ -167,7 +168,7 @@ const mockAPI = [
     interactiveTargetImageStart: 104, 
     interactivityStart: 105,
     countdownClockStart: 105,
-    interactivityDuration: 4,
+    interactivityDuration: 3,
     highlightCorrectAnswerStart: 110, 
     highlightCorrectAnswerDuration: 2,
     activityEnd: 112,
@@ -241,7 +242,7 @@ const mockAPI = [
     activityType: 'resultsScreen',
     interactive: false,
     resultsScreenStart: 156,
-    resultsScreenDuration: 10,
+    resultsScreenDuration: 9,
     resultsScreenOptions: [
       {id: 1, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/eyes.png')},
       {id: 2, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/fingers.png')},
@@ -313,35 +314,19 @@ export default class App extends Component<Props> {
        multipleChoiceOptions: [],
        multipleChoiceCheckmark: false,
        multipleChoiceCorrectAnswer: null,
-       resultsScreen: true,
-       resultsScreenOptions: [
-        {id: 1, isSpeechActivity: false, answerCorrect: true, image:require('./assets/images/word_play/eyes.png')},
-        {id: 2, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/fingers.png')},
-        {id: 3, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/nose.png')},
-        {id: 4, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/ear.png')},
-        {id: 5, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/finger.png')},
-        {id: 6, isSpeechActivity: false, answerCorrect: true, image:require('./assets/images/word_play/foot.png')},
-        {id: 7, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/feet.png')},
-        {id: 8, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/knee.png')},
-        {id: 9, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/body.png')},
-        {id: 10, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/mouth.png')},
-        {id: 11, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/toe.png')}
-      ],
+       resultsScreen: false,
+       resultsScreenOptions: [],
        resultsScreenFinalScores: []
      }
   }
 
   componentDidMount() {
-    Orientation.lockToLandscape();//ComponentWillMount?
+    Orientation.lockToLandscape();
 
     AudioRecorder.onFinished = (data) => {
       this._finishRecording(data.status === "OK", data.audioFileURL);
     };
   };
-
-  componentWillUnmount() {
-    //cleanup
-  }
 
   countdownClock() {
     this.setState(prevState => ({
@@ -884,7 +869,7 @@ animateSpeechActivityRecording = (iterations) => {
           <View style={styles.reloadContainer}>
             <TouchableOpacity 
               onPress={() => this._onPressReloadVideo()}>
-              <Image style={styles.reloadIcon} source={require('./assets/images/refresh.png')} />
+              <Icon style={{color: '#FFFFFF'}} name="ios-refresh-circle" size={40} color="#000000" />
             </TouchableOpacity>
           </View>
           <Video
@@ -931,7 +916,7 @@ animateSpeechActivityRecording = (iterations) => {
                     style={styles.trueFalseGreenYesButton}>
                       {this.state.trueFalseCheckmark && (this.state.trueFalseCorrectAnswer === 'green') &&
                         <View style={styles.trueFalseCheckmarkContainer}>
-                          <Image style={styles.trueFalseCheckmarkIcon} source={require('./assets/images/checkmark.png')} />
+                          <Icon style={styles.checkmarkIcon} name="md-checkmark" size={40} color="#FFFFFF" />
                         </View>
                       }
                   </TouchableOpacity>
@@ -948,7 +933,7 @@ animateSpeechActivityRecording = (iterations) => {
                     >
                     {this.state.trueFalseCheckmark && (this.state.trueFalseCorrectAnswer === 'red') &&
                       <View style={styles.trueFalseCheckmarkContainer}>
-                        <Image source={require('./assets/images/checkmark.png')} />
+                        <Icon style={styles.checkmarkIcon} name="md-checkmark" size={40} color="#FFFFFF" />
                       </View>
                     }
                   </TouchableOpacity>
@@ -1031,7 +1016,7 @@ animateSpeechActivityRecording = (iterations) => {
                         <Image style={styles.multipleChoiceImage} source={option.image}  />
                         { this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === option.id) &&
                           <View style={styles.multipleChoiceCheckmarkContainer}>
-                            <Image style={styles.multipleChoiceCheckmarkIcon} source={require('./assets/images/checkmark.png')} />
+                            <Icon style={styles.checkmarkIcon} name="md-checkmark" size={40} color="#FFFFFF" />
                           </View>
                         }
                       </View>
@@ -1097,13 +1082,9 @@ const styles = StyleSheet.create({
   },
   reloadContainer: {
     position: 'absolute',
-    top: 5,
-    left: 5,
+    top: 10,
+    left: 15,
     zIndex: 10
-  },
-  reloadIcon: {
-    height: 35,
-    width: 35
   },
   ticketContainer: {
     flexDirection: 'row',
@@ -1324,9 +1305,8 @@ const styles = StyleSheet.create({
     borderColor: '#ffffff',
     borderWidth: 3
   },
-  trueFalseCheckmarkIcon: {
-    height: 23,
-    width: 30
+  checkmarkIcon: {
+    marginTop: -3
   },
   speechActivityImageContainer: {
     zIndex: 3,
@@ -1446,10 +1426,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#ffffff',
     borderWidth: 3
-  },
-  multipleChoiceCheckmarkIcon: {
-    height: 23,
-    width: 30
   },
   multipleChoiceImageContainerSelected: {
     borderWidth: 10, 
