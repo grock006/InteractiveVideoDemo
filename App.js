@@ -283,7 +283,7 @@ export default class App extends Component<Props> {
        countdownClock: false,
        countdownClockSeconds: 0,
        isVideoLoaded: false,
-       isPaused: this.f,
+       isPaused: this.t,
        isMuted: this.f,
        interactiveContainer: false,
        trueFalse: false,
@@ -313,8 +313,20 @@ export default class App extends Component<Props> {
        multipleChoiceOptions: [],
        multipleChoiceCheckmark: false,
        multipleChoiceCorrectAnswer: null,
-       resultsScreen: false,
-       resultsScreenOptions: [],
+       resultsScreen: true,
+       resultsScreenOptions: [
+        {id: 1, isSpeechActivity: false, answerCorrect: true, image:require('./assets/images/word_play/eyes.png')},
+        {id: 2, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/fingers.png')},
+        {id: 3, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/nose.png')},
+        {id: 4, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/ear.png')},
+        {id: 5, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/finger.png')},
+        {id: 6, isSpeechActivity: false, answerCorrect: true, image:require('./assets/images/word_play/foot.png')},
+        {id: 7, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/feet.png')},
+        {id: 8, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/knee.png')},
+        {id: 9, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/body.png')},
+        {id: 10, isSpeechActivity: true, answerCorrect: true, image:require('./assets/images/word_play/mouth.png')},
+        {id: 11, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/toe.png')}
+      ],
        resultsScreenFinalScores: []
      }
   }
@@ -896,7 +908,7 @@ animateSpeechActivityRecording = (iterations) => {
 
             {this.state.countdownClock && 
               <View style={styles.countdownClockContainer}>
-                <Image style={styles.countdownClockIcon} source={require('./assets/images/timer.png')} />
+                <Image style={styles.countdownClockIcon} source={require('./assets/images/timer_white.png')} />
                 <Text style={styles.countdownClockSeconds}>{this.state.countdownClockSeconds}</Text>
               </View>
             }
@@ -1048,7 +1060,7 @@ animateSpeechActivityRecording = (iterations) => {
                     }
                     {result.answerCorrect &&
                       <View style={styles.resultsScreenTicketIconContainer}>
-                        <Text style={styles.resultsScreenTicketIconText}>+1</Text>
+                        <Image source={require('./assets/images/ticket_orange_one.png')} />
                       </View>
                     }
                   </View>
@@ -1156,18 +1168,18 @@ const styles = StyleSheet.create({
   resultsScreen: {
     zIndex: 2,
     backgroundColor: 'rgba(36, 102, 215, 0.2)',
-    height: 300,
-    width: 630,
+    height: 310,
+    width: 430,
     borderWidth: 2,
     borderColor: 'rgb(60, 123, 218)',
     borderRadius: 10,
-    marginTop: 55,
+    marginTop: 40,
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignSelf: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 20,
+    paddingTop: 5,
     paddingRight: 10,
     paddingLeft: 10
   },
@@ -1177,9 +1189,9 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(36, 102, 215)',
     borderWidth: 2,
     borderRadius: 10,
-    marginTop: 20,
+    marginTop: 5,
     marginRight: 5,
-    marginBottom: 20,
+    marginBottom: 5,
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     position: 'relative'
@@ -1218,14 +1230,8 @@ const styles = StyleSheet.create({
     right: -10,
     width: 25,
     height: 25,
-    backgroundColor: 'rgb(250, 55, 33)',
-    borderRadius: 3,
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  resultsScreenTicketIconText: {
-    color: 'rgb(254, 236, 54)',
-    fontWeight: '700'
   },
   interactiveContainer: {
     flex: 1,
