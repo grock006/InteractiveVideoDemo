@@ -86,8 +86,8 @@ const mockAPI = [
     interactiveScreenStart: 58,
     interactiveTargetImageStart: 58,
     interactiveButtonStart: 58,
-    interactivityStart: 60,
-    countdownClockStart: 60,
+    interactivityStart: 61,
+    countdownClockStart: 61,
     interactivityDuration: 3,
     interactivityAnimationDuration: 3,
     highlightCorrectAnswerStart: 66,
@@ -109,9 +109,9 @@ const mockAPI = [
     countdownClockStart: 70,
     interactivityDuration: 3,
     interactivityAnimationDuration: 3,
-    highlightCorrectAnswerStart: 76,
+    highlightCorrectAnswerStart: 75,
     highlightCorrectAnswerDuration: 2,
-    activityEnd: 78,
+    activityEnd: 77, 
     activityImages: require('./assets/images/word_play/finger.png'),
     correctAnswer: 'these are my fingers',
     pcmFileName: 'fingers'
@@ -467,12 +467,15 @@ export default class App extends Component<Props> {
         this.setState({
           speechActivityCorrectAnswer: true
         });
-        this._setResultsScreenFinalScore(activityId, activityType, true)
+        this._setResultsScreenFinalScore(activityId, activityType, true);
+        this.incrementTicketCounter();
+        correctAnswerSfx.play();
       } else {
         this.setState({
           speechActivityIncorrectAnswer: true
         });
-        this._setResultsScreenFinalScore(activityId, activityType, false)
+        this._setResultsScreenFinalScore(activityId, activityType, false);
+        incorrectAnswerSfx.play();
       }
     } 
   };
@@ -492,9 +495,6 @@ export default class App extends Component<Props> {
       this.setState({
         speechActivityProcessing: false,
       });
-      if (this.state.speechActivityCorrectAnswer) {
-        this.incrementTicketCounter();
-      }
     }
 
     this.highlightCorrectAnswerTimeout = setTimeout(
