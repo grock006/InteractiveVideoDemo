@@ -243,6 +243,7 @@ const mockAPI = [
     interactive: false,
     resultsScreenStart: 156,
     resultsScreenDuration: 9,
+    resultsScreenEnd: 164,
     resultsScreenOptions: [
       {id: 1, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/eyes.png')},
       {id: 2, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/fingers.png')},
@@ -273,6 +274,12 @@ const incorrectAnswerSfx = new Sound(soundEffects.incorrectAnswer, (error) => {c
 const countdownTimerEndSfx = new Sound(soundEffects.countdownTimerEnd, (error) => {console.log(error)});
 const interactiveScreenSlideInSfx = new Sound(soundEffects.interactiveScreenSlideIn, (error) => {console.log(error)});
 
+clickSfx.setVolume(0.5); 
+correctAnswerSfx.setVolume(0.5); 
+incorrectAnswerSfx.setVolume(0.5); 
+countdownTimerEndSfx.setVolume(0.5); 
+interactiveScreenSlideInSfx.setVolume(0.5); 
+
 type Props = {};
 export default class App extends Component<Props> {
   constructor(props) {
@@ -284,7 +291,7 @@ export default class App extends Component<Props> {
        countdownClock: false,
        countdownClockSeconds: 0,
        isVideoLoaded: false,
-       isPaused: this.t,
+       isPaused: this.f,
        isMuted: this.f,
        interactiveContainer: false,
        trueFalse: false,
@@ -348,15 +355,15 @@ export default class App extends Component<Props> {
         resultsScreenOptions: resultsScreenOptions
       });
 
-      this.clearResultsScreenTimeout = setTimeout(
-        () => {
-          this.setState({
-            resultsScreen: false,
-            resultsScreenOptions: []
-          });
-          clearTimeout(this.clearResultsScreenTimeout);
-        }, mockAPI.resultsScreenDuration * 1000
-      );
+      // this.clearResultsScreenTimeout = setTimeout(
+      //   () => {
+      //     this.setState({
+      //       resultsScreen: false,
+      //       resultsScreenOptions: []
+      //     });
+      //     clearTimeout(this.clearResultsScreenTimeout);
+      //   }, mockAPI.resultsScreenDuration * 1000
+      // );
     }
   }
 
@@ -742,10 +749,21 @@ animateSpeechActivityRecording = (iterations) => {
     this.setState({
       isVideoLoaded: true
     });
-    //this.player.seek(12);
   };
 
-    _onPressReloadVideo = () => {
+  _onPressPlay = () => {
+    this.setState({
+      isPaused: false
+    });
+  }
+
+  _onPressPause = () => {
+    this.setState({
+      isPaused: true
+    });
+  }
+
+  _onPressReloadVideo = () => {
     if(this.player !== null) {
       this.setState({
         ticketCounter: 0,
@@ -857,6 +875,12 @@ animateSpeechActivityRecording = (iterations) => {
           this._setResultsScreen(mockAPI);
         }
 
+        if(currentTime === mockAPI.resultsScreenEnd) {
+          this.setState({
+            isPaused: true
+          })
+        }
+
       });
     }
   };
@@ -866,12 +890,31 @@ animateSpeechActivityRecording = (iterations) => {
       <SafeAreaView style={styles.safeArea}>
         <StatusBar hidden={true}/>
         <View style={styles.videoContainer}>
+
           <View style={styles.reloadContainer}>
             <TouchableOpacity 
               onPress={() => this._onPressReloadVideo()}>
               <Icon style={{color: '#FFFFFF'}} name="ios-refresh-circle" size={40} color="#000000" />
             </TouchableOpacity>
           </View>
+        
+        {false &&
+          <View style={styles.playPauseContainer}>
+            {this.state.isPaused && this.state.isVideoLoaded &&
+              <TouchableOpacity 
+                onPress={() => this._onPressPlay()}>
+                <Icon name="ios-play-outline" size={40} color="#FFFFFF" />
+              </TouchableOpacity>
+            }
+            {!this.state.isPaused &&
+              <TouchableOpacity 
+                onPress={() => this._onPressPause()}>
+                <Icon style={{color: '#FFFFFF'}} name="ios-pause-outline" size={40} color="#000000" />
+              </TouchableOpacity>
+            }
+          </View>
+          }
+
           <Video
             ref={this._onVideoMount}
             controls={true}
@@ -1081,6 +1124,12 @@ const styles = StyleSheet.create({
     left: 0
   },
   reloadContainer: {
+    position: 'absolute',
+    top: 10,
+    left: 15,
+    zIndex: 10
+  },
+  playPauseContainer: {
     position: 'absolute',
     top: 10,
     left: 15,
