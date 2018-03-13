@@ -20,7 +20,7 @@ import Sound from 'react-native-sound';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
-
+console.log('DEVICE_WIDTH', DEVICE_WIDTH, 'DEVICE_HEIGHT', DEVICE_HEIGHT)
 const mockAPI = [
   {
     activityId: 1,
@@ -31,13 +31,13 @@ const mockAPI = [
     interactiveTargetImageStart: 12,//time to display activity target image or images
     interactiveButtonStart: 12,//time to display interactive buttons, non-clickable, could also be microphone
     greenButtonHighlightStart: 15, //time to display green button highlight
-    redButtonHighlightStart: 16,//time to display red button highlight
+    redButtonHighlightStart: 17,//time to display red button highlight
     interactivityStart: 18,//time to allow user interactivity, start countdown clock 
     countdownClockStart: 18,//time to display clock countdown, should be same as interactivityStart
     interactivityDuration: 3,//total time for user interactivity, can use instead of countdown duration
-    highlightCorrectAnswerStart: 22,//time to highlight correct answer
-    highlightCorrectAnswerDuration: 2,//duration to highlight correct answer
-    activityEnd: 24,//time to end all activity screens
+    highlightCorrectAnswerStart: 24,//time to highlight correct answer
+    highlightCorrectAnswerDuration: 1,//duration to highlight correct answer
+    activityEnd: 25,//time to end all activity screens
     activityImages: require('./assets/images/word_play/eyes.png'), //image assets, target images, interactive icons, etc.
     correctAnswer: 'green' //correct answer to the activity question//
   },
@@ -49,14 +49,14 @@ const mockAPI = [
     interactiveScreenStart: 26, 
     interactiveTargetImageStart: 26, 
     interactiveButtonStart: 26, 
-    greenButtonHighlightStart: 28, 
-    redButtonHighlightStart: 29, 
+    greenButtonHighlightStart: 29, 
+    redButtonHighlightStart: 30, 
     interactivityStart: 30, 
     countdownClockStart: 30, 
     interactivityDuration: 3,
-    highlightCorrectAnswerStart: 34,
-    highlightCorrectAnswerDuration: 2,
-    activityEnd: 36,
+    highlightCorrectAnswerStart: 36,
+    highlightCorrectAnswerDuration: 1,
+    activityEnd: 37,
     activityImages: require('./assets/images/word_play/fingers.png'),
     correctAnswer: 'red'
   },
@@ -127,8 +127,8 @@ const mockAPI = [
     interactivityStart: 86,
     countdownClockStart: 86,
     interactivityDuration: 3,
-    highlightCorrectAnswerStart: 90, 
-    highlightCorrectAnswerDuration: 2,
+    highlightCorrectAnswerStart: 91, 
+    highlightCorrectAnswerDuration: 1,
     activityEnd: 92,
     activityOptions: [
       {id: 1, image: require('./assets/images/word_play/foot.png')},
@@ -148,9 +148,9 @@ const mockAPI = [
     interactivityStart: 95,
     countdownClockStart: 95,
     interactivityDuration: 3,
-    highlightCorrectAnswerStart: 99, 
-    highlightCorrectAnswerDuration: 3,
-    activityEnd: 102,
+    highlightCorrectAnswerStart: 101, 
+    highlightCorrectAnswerDuration: 2,
+    activityEnd: 103,
     activityOptions: [
       {id: 1, image: require('./assets/images/word_play/body.png')},
       {id: 2, image: require('./assets/images/word_play/finger.png')},
@@ -169,8 +169,8 @@ const mockAPI = [
     interactivityStart: 105,
     countdownClockStart: 105,
     interactivityDuration: 3,
-    highlightCorrectAnswerStart: 110, 
-    highlightCorrectAnswerDuration: 2,
+    highlightCorrectAnswerStart: 111, 
+    highlightCorrectAnswerDuration: 1,
     activityEnd: 112,
     activityOptions: [
       {id: 1, image: require('./assets/images/word_play/ear.png')},
@@ -192,8 +192,8 @@ const mockAPI = [
     countdownClockStart: 121, 
     interactivityDuration: 3, 
     interactivityAnimationDuration: 3, 
-    highlightCorrectAnswerStart: 128,
-    highlightCorrectAnswerDuration: 3,
+    highlightCorrectAnswerStart: 130,
+    highlightCorrectAnswerDuration: 1,
     activityEnd: 131,
     activityImages: require('./assets/images/word_play/body.png'),
     correctAnswer: 'body',
@@ -211,8 +211,8 @@ const mockAPI = [
     countdownClockStart: 133, 
     interactivityDuration: 3, 
     interactivityAnimationDuration: 3, 
-    highlightCorrectAnswerStart: 140,
-    highlightCorrectAnswerDuration: 3,
+    highlightCorrectAnswerStart: 142,
+    highlightCorrectAnswerDuration: 1,
     activityEnd: 143,
     activityImages: require('./assets/images/word_play/mouth.png'),
     correctAnswer: 'mouth',
@@ -230,9 +230,9 @@ const mockAPI = [
     countdownClockStart: 145, 
     interactivityDuration: 3, 
     interactivityAnimationDuration: 3, 
-    highlightCorrectAnswerStart: 152,
-    highlightCorrectAnswerDuration: 3,
-    activityEnd: 155,
+    highlightCorrectAnswerStart: 154,
+    highlightCorrectAnswerDuration: 2,
+    activityEnd: 156,
     activityImages: require('./assets/images/word_play/toe.png'),
     correctAnswer: 'toe',
     pcmFileName: 'toe'
@@ -261,11 +261,11 @@ const mockAPI = [
 ];
 
 const soundEffects = {
-  click: require('./assets/audio/click.mp3'),
-  correctAnswer: require('./assets/audio/correct_answer.mp3'),
-  incorrectAnswer: require('./assets/audio/incorrect_answer.mp3'),
-  countdownTimerEnd: require('./assets/audio/countdown_timer_end.mp3'),
-  interactiveScreenSlideIn: require('./assets/audio/interactive_screen_slide_in.mp3')
+  click: require('./assets/audio/click.wav'),
+  correctAnswer: require('./assets/audio/correct_answer.wav'),
+  incorrectAnswer: require('./assets/audio/incorrect_answer.wav'),
+  countdownTimerEnd: require('./assets/audio/countdown_timer_end_new.wav'),
+  interactiveScreenSlideIn: require('./assets/audio/interactive_screen_slide_in.wav')
 }
 
 const clickSfx = new Sound(soundEffects.click, (error) => {console.log(error)});
@@ -273,12 +273,6 @@ const correctAnswerSfx = new Sound(soundEffects.correctAnswer, (error) => {conso
 const incorrectAnswerSfx = new Sound(soundEffects.incorrectAnswer, (error) => {console.log(error)});
 const countdownTimerEndSfx = new Sound(soundEffects.countdownTimerEnd, (error) => {console.log(error)});
 const interactiveScreenSlideInSfx = new Sound(soundEffects.interactiveScreenSlideIn, (error) => {console.log(error)});
-
-clickSfx.setVolume(0.5); 
-correctAnswerSfx.setVolume(0.5); 
-incorrectAnswerSfx.setVolume(0.5); 
-countdownTimerEndSfx.setVolume(0.5); 
-interactiveScreenSlideInSfx.setVolume(0.5); 
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -291,7 +285,7 @@ export default class App extends Component<Props> {
        countdownClock: false,
        countdownClockSeconds: 0,
        isVideoLoaded: false,
-       isPaused: this.f,
+       isPaused: this.t,
        isMuted: this.f,
        interactiveContainer: false,
        trueFalse: false,
@@ -821,7 +815,9 @@ animateSpeechActivityRecording = (iterations) => {
 
   _playInteractiveSequence = (status) => {
     if (status && mockAPI) {
+      console.log('status.currentTime', status.currentTime);
       let currentTime = Math.round(status.currentTime);
+      console.log('currentTime', currentTime);
       mockAPI.forEach((mockAPI) => {  
         // activityStart: 3, //time to start interactive segment within overall video, in seconds
         // interactiveScreenStart: 3, //time to display interactive screen

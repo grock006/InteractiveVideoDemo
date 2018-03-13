@@ -1496,7 +1496,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = enterprise.aofl.interactivevideo;
 				PRODUCT_NAME = InteractiveVideoDemo;
-				PROVISIONING_PROFILE = "b84603d4-f32b-4f14-bfc2-875193afe0d7";
+				PROVISIONING_PROFILE = "aff6fa7b-3307-49e4-ad30-889ba592c88b";
 				PROVISIONING_PROFILE_SPECIFIER = Group_Dev_Profile;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1527,7 +1527,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = enterprise.aofl.interactivevideo;
 				PRODUCT_NAME = InteractiveVideoDemo;
-				PROVISIONING_PROFILE = "b84603d4-f32b-4f14-bfc2-875193afe0d7";
+				PROVISIONING_PROFILE = "aff6fa7b-3307-49e4-ad30-889ba592c88b";
 				PROVISIONING_PROFILE_SPECIFIER = Group_Dev_Profile;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
