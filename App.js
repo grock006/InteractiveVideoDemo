@@ -286,7 +286,7 @@ export default class App extends Component<Props> {
        countdownClock: false,
        countdownClockSeconds: 0,
        isVideoLoaded: false,
-       isPaused: this.t,
+       isPaused: this.f,
        isMuted: this.f,
        interactiveContainer: false,
        trueFalse: false,
