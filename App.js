@@ -170,8 +170,8 @@ const mockAPI = [
     countdownClockStart: 104,
     interactivityDuration: 3,
     highlightCorrectAnswerStart: 110, 
-    highlightCorrectAnswerDuration: 2,
-    activityEnd: 112,
+    highlightCorrectAnswerDuration: 1,
+    activityEnd: 111,
     activityOptions: [
       {id: 1, image: require('./assets/images/word_play/ear.png')},
       {id: 2, image: require('./assets/images/word_play/foot.png')},
@@ -286,7 +286,7 @@ export default class App extends Component<Props> {
        countdownClock: false,
        countdownClockSeconds: null,
        isVideoLoaded: false,
-       isPaused: this.t,
+       isPaused: this.f,
        isMuted: this.f,
        interactiveContainer: false,
        trueFalse: false,
@@ -744,7 +744,6 @@ animateSpeechActivityRecording = (iterations) => {
     this.setState({
       isVideoLoaded: true
     });
-    this.player.seek(55);
   };
 
   _onPressPlay = () => {
