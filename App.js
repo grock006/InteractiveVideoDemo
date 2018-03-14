@@ -20,7 +20,7 @@ import Sound from 'react-native-sound';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
-console.log('DEVICE_WIDTH', DEVICE_WIDTH, 'DEVICE_HEIGHT', DEVICE_HEIGHT)
+
 const mockAPI = [
   {
     activityId: 1,
@@ -283,9 +283,9 @@ export default class App extends Component<Props> {
      this.state = {
        ticketCounter: 0,
        countdownClock: false,
-       countdownClockSeconds: 0,
+       countdownClockSeconds: null,
        isVideoLoaded: false,
-       isPaused: this.t,
+       isPaused: this.f,
        isMuted: this.f,
        interactiveContainer: false,
        trueFalse: false,
@@ -303,7 +303,7 @@ export default class App extends Component<Props> {
        speechActivityIncorrectAnswer: false,
        speechActivityCheckmark: false,
        speechActivityImage: null,
-       speechActivityRecording: false,
+       speechActivityRecording: true,
        speechActivityProcessing: false,
        speechActivityAudioPath: null,
        speechActivityScore: null,
@@ -815,9 +815,7 @@ animateSpeechActivityRecording = (iterations) => {
 
   _playInteractiveSequence = (status) => {
     if (status && mockAPI) {
-      console.log('status.currentTime', status.currentTime);
       let currentTime = Math.round(status.currentTime);
-      console.log('currentTime', currentTime);
       mockAPI.forEach((mockAPI) => {  
         // activityStart: 3, //time to start interactive segment within overall video, in seconds
         // interactiveScreenStart: 3, //time to display interactive screen
@@ -890,7 +888,7 @@ animateSpeechActivityRecording = (iterations) => {
           <View style={styles.reloadContainer}>
             <TouchableOpacity 
               onPress={() => this._onPressReloadVideo()}>
-              <Icon style={{color: '#FFFFFF'}} name="ios-refresh-circle" size={40} color="#000000" />
+              <Icon style={{color: '#FFFFFF'}} name="ios-refresh-circle" size={30} color="#000000" />
             </TouchableOpacity>
           </View>
         
@@ -920,7 +918,7 @@ animateSpeechActivityRecording = (iterations) => {
             muted={this.state.isMuted}
             onLoad={this._onVideoLoad}
             onProgress={this._onVideoProgress}
-            style={[styles.video, { width: 668, height: 375 }]}
+            style={[styles.video, { width: 568, height: 320 }]}
             source={videoSRC}
           />
 
@@ -955,7 +953,7 @@ animateSpeechActivityRecording = (iterations) => {
                     style={styles.trueFalseGreenYesButton}>
                       {this.state.trueFalseCheckmark && (this.state.trueFalseCorrectAnswer === 'green') &&
                         <View style={styles.trueFalseCheckmarkContainer}>
-                          <Icon style={styles.checkmarkIcon} name="md-checkmark" size={40} color="#FFFFFF" />
+                          <Icon style={styles.checkmarkIcon} name="md-checkmark" size={30} color="#FFFFFF" />
                         </View>
                       }
                   </TouchableOpacity>
@@ -972,7 +970,7 @@ animateSpeechActivityRecording = (iterations) => {
                     >
                     {this.state.trueFalseCheckmark && (this.state.trueFalseCorrectAnswer === 'red') &&
                       <View style={styles.trueFalseCheckmarkContainer}>
-                        <Icon style={styles.checkmarkIcon} name="md-checkmark" size={40} color="#FFFFFF" />
+                        <Icon style={styles.checkmarkIcon} name="md-checkmark" size={30} color="#FFFFFF" />
                       </View>
                     }
                   </TouchableOpacity>
@@ -1001,7 +999,7 @@ animateSpeechActivityRecording = (iterations) => {
 
                     {this.state.speechActivityProcessing && 
                       <Animated.View style={
-                        {borderColor: '#ffffff', borderWidth: 5, position: 'absolute', height: 90, width: 90, borderRadius: 100, opacity: this.state.speechActivityProcessingAnim}
+                        {borderColor: '#ffffff', borderWidth: 3, position: 'absolute', height: 77, width: 77, borderRadius: 100, opacity: this.state.speechActivityProcessingAnim}
                       }></Animated.View>
                     }
 
@@ -1015,14 +1013,14 @@ animateSpeechActivityRecording = (iterations) => {
                       <View>
                         {!this.state.speechActivityCorrectAnswer && !this.state.speechActivityIncorrectAnswer &&
                           <View>
-                           <Image style={styles.speechActivityIcon} source={require('./assets/images/tencent_microphone_sm.png')} />
+                           <Image style={styles.speechActivityIcon} source={require('./assets/images/tencent_microphone_sm_6.png')} />
                           </View>
                         }
                         {!this.state.speechActivityProcessing && this.state.speechActivityCorrectAnswer && !this.state.countdownClock &&
-                          <Image style={styles.speechActivityIcon} source={require('./assets/images/happy_star.png')} />
+                          <Image style={styles.speechActivityIcon} source={require('./assets/images/happy_star_6.png')} />
                         }
                         {!this.state.speechActivityProcessing && this.state.speechActivityIncorrectAnswer && !this.state.countdownClock &&
-                          <Image style={styles.speechActivityIcon} source={require('./assets/images/sad_star_blue.png')} />
+                          <Image style={styles.speechActivityIcon} source={require('./assets/images/sad_star_blue_6.png')} />
                         }
 
                       </View>
@@ -1055,7 +1053,7 @@ animateSpeechActivityRecording = (iterations) => {
                         <Image style={styles.multipleChoiceImage} source={option.image}  />
                         { this.state.multipleChoiceCheckmark && (this.state.multipleChoiceCorrectAnswer === option.id) &&
                           <View style={styles.multipleChoiceCheckmarkContainer}>
-                            <Icon style={styles.checkmarkIcon} name="md-checkmark" size={40} color="#FFFFFF" />
+                            <Icon style={styles.checkmarkIcon} name="md-checkmark" size={30} color="#FFFFFF" />
                           </View>
                         }
                       </View>
@@ -1107,8 +1105,8 @@ const styles = StyleSheet.create({
   },
   videoContainer: {
     flex: 1,
-    height: 375,
-    width: 668,
+    height: 320,
+    width: 568,
     backgroundColor: '#000000',
     position: 'relative'
   },
@@ -1135,67 +1133,68 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 35,
-    width: 100,
+    height: 25,
+    width: 70,
     borderWidth: 0,
     borderColor: '#6C686D',
     backgroundColor: '#ffffff',
     position: 'absolute',
     right: 15,
-    top: 10,
+    top: 15,
     borderRadius: 50
   },
   ticketCounter: {
     color: '#F0951C',
     fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: 30,
-    height: 35,
+    fontSize: 20,
+    height: 25,
     width: 20
   },
   ticketCounterIcon: {
-    width: 32,
-    height: 25,
-    marginRight: 5
+    width: 26,
+    height: 20,
+    marginRight: -3
   },
   ticketCounterPlus: {
     color: '#F0951C',
     fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: 25,
-    width: 15
+    fontSize: 20,
+    marginLeft: 5,
+    marginTop: -2
   },
   countdownClockContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 35,
-    width: 100,
+    height: 25,
+    width: 70,
     borderColor: 'transparent',
     borderWidth: 3,
     borderRadius: 50,
     backgroundColor: 'rgb(36, 102, 215)',
     position: 'absolute',
-    right: 120,
-    top: 10
+    right: 100,
+    top: 15
   },
   countdownClockSeconds: {
     color: '#FFFFFF',
     fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: 30,
-    height: 35,
-    width: 35
+    fontSize: 20,
+    height: 25,
+    width: 25
   },
   countdownClockIcon: {
-    width: 25,
-    height: 25
+    width: 20,
+    height: 20
   },
   resultsScreen: {
     zIndex: 2,
     backgroundColor: 'rgba(36, 102, 215, 0.2)',
-    height: 310,
-    width: 430,
+    height: 265,
+    width: 360,
     borderWidth: 2,
     borderColor: 'rgb(60, 123, 218)',
     borderRadius: 10,
@@ -1210,8 +1209,8 @@ const styles = StyleSheet.create({
     paddingLeft: 10
   },
   resultsScreenImageContainer: {
-    height: 90,
-    width: 90,
+    height: 75,
+    width: 75,
     borderColor: 'rgb(36, 102, 215)',
     borderWidth: 2,
     borderRadius: 10,
@@ -1223,20 +1222,20 @@ const styles = StyleSheet.create({
     position: 'relative'
   },
   resultsScreenImage: {
-    height: 75,
-    width: 75,
+    height: 60,
+    width: 60,
     alignSelf: 'center'
   },
   resultsScreenSpeechActivityContainer: {
     alignItems: 'center'
   }, 
   resultsScreenSpeechActivityImage: {
-    height: 45,
-    width: 45
+    height: 40,
+    width: 40
   }, 
   resultsScreenSpeechActivityIconContainer: {
-    width: 25,
-    height: 25,
+    width: 15,
+    height: 15,
     alignSelf: 'center',
     marginTop: 5,
     backgroundColor: 'rgb(47, 154, 224)',
@@ -1247,8 +1246,8 @@ const styles = StyleSheet.create({
     borderWidth: 1
   }, 
   resultsScreenSpeechActivityIcon: {
-    height: 22,
-    width: 14
+    height: 12,
+    width: 8
   },
   resultsScreenTicketIconContainer: {
     position: 'absolute',
@@ -1267,8 +1266,8 @@ const styles = StyleSheet.create({
     top: 55,
     right: 15, 
     backgroundColor: 'rgba(36, 102, 215, 0.2)',
-    height: 300,
-    width: 300,
+    height: 245,
+    width: 245,
     borderWidth: 2,
     borderColor: 'rgb(36, 102, 215)',
     borderRadius: 10
@@ -1276,8 +1275,8 @@ const styles = StyleSheet.create({
   trueFalseImageContainer: {
     zIndex: 3,
     position: 'relative',
-    height: 165,
-    width: 165,
+    height: 110,
+    width: 110,
     marginTop: 12,
     borderWidth: 2, 
     borderColor: 'rgb(36, 102, 215)',
@@ -1287,8 +1286,8 @@ const styles = StyleSheet.create({
   },
   trueFalseImage: {
     alignSelf: 'center',
-    width: 135, 
-    height: 135,
+    width: 80, 
+    height: 80,
     borderColor: '#ffffff',
     borderWidth: 3,
     borderRadius: 10
@@ -1296,12 +1295,12 @@ const styles = StyleSheet.create({
   trueFalseButtonsContainer: {
     flexDirection: 'row',
     marginTop: 15,
-    width: 270,
+    width: 245,
     justifyContent: 'space-around'
   },
   trueFalseRedNoButton: {
-    height: 75,
-    width: 75,
+    height: 65,
+    width: 65,
     backgroundColor: '#C30016',
     borderRadius: 50,
     zIndex: 5,
@@ -1312,8 +1311,8 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   trueFalseGreenYesButton: {
-    height: 75,
-    width: 75,
+    height: 65,
+    width: 65,
     backgroundColor: '#48AA09',
     borderRadius: 50,
     zIndex: 5,
@@ -1325,8 +1324,8 @@ const styles = StyleSheet.create({
   },
   trueFalseHighlight: {
     borderColor: 'transparent',
-    height: 90,
-    width: 90,
+    height: 80,
+    width: 80,
     backgroundColor: 'transparent',
     borderRadius: 100,
     borderWidth: 10,
@@ -1342,8 +1341,8 @@ const styles = StyleSheet.create({
     bottom: -10,
     right: -10,
     backgroundColor: '#48AA09',
-    height: 40,
-    width: 40,
+    height: 30,
+    width: 30,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -1356,8 +1355,8 @@ const styles = StyleSheet.create({
   speechActivityImageContainer: {
     zIndex: 3,
     position: 'relative',
-    height: 165,
-    width: 165,
+    height: 110,
+    width: 110,
     marginTop: 12,
     borderWidth: 2, 
     borderColor: 'rgb(36, 102, 215)',
@@ -1368,17 +1367,17 @@ const styles = StyleSheet.create({
   },
   speechActivityImage: {
     alignSelf: 'center',
-    width: 135, 
-    height: 135,
+    width: 80, 
+    height: 80,
     borderColor: '#ffffff',
     borderWidth: 3,
     borderRadius: 10
   },
   speechActivityIconContainer: {
-    width: 90,
-    height: 90,
+    width: 70,
+    height: 70,
     alignSelf: 'center',
-    marginTop: 15,
+    marginTop: 20,
     zIndex: 3,
     backgroundColor: 'rgb(47, 154, 224)',
     borderRadius: 100,
@@ -1388,51 +1387,51 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   speechActivityRecordingLeftOne: {
-    top: 40, 
-    left: 10, 
+    top: 30, 
+    left: 5, 
     backgroundColor: 'rgb(8, 50, 90)', 
     height: 10, 
-    width: 3, 
+    width: 2, 
     position: 'absolute'
   },
   speechActivityRecordingLeftTwo: {
-    top: 35, 
-    left: 15, 
+    top: 25, 
+    left: 10, 
     backgroundColor: 'rgb(8, 50, 90)', 
     height: 20, 
-    width: 3, 
+    width: 2, 
     position: 'absolute'
   },
   speechActivityRecordingLeftThree: {
-    top: 30, 
-    left: 20, 
+    top: 20, 
+    left: 15, 
     backgroundColor: 'rgb(8, 50, 90)', 
     height: 30, 
-    width: 3, 
+    width: 2, 
     position: 'absolute'
   },
   speechActivityRecordingRightOne: {
-    top: 40, 
-    right: 10, 
+    top: 30, 
+    right: 5, 
     backgroundColor: 'rgb(8, 50, 90)', 
     height: 10, 
-    width: 3, 
+    width: 2, 
     position: 'absolute'
   },
   speechActivityRecordingRightTwo: {
-    top: 35, 
-    right: 15, 
+    top: 25, 
+    right: 10, 
     backgroundColor: 'rgb(8, 50, 90)', 
     height: 20, 
-    width: 3, 
+    width: 2, 
     position: 'absolute'
   },
   speechActivityRecordingRightThree: {
-    top: 30, 
-    right: 20, 
+    top: 20, 
+    right: 15, 
     backgroundColor: 'rgb(8, 50, 90)', 
     height: 30, 
-    width: 3, 
+    width: 2, 
     position: 'absolute'
   },
   multipleChoiceContainer: {
@@ -1448,8 +1447,8 @@ const styles = StyleSheet.create({
   multipleChoiceImageContainer: {
     zIndex: 3,
     position: 'relative',
-    height: 130,
-    width: 130,
+    height: 105,
+    width: 105,
     marginTop: 5,
     marginBottom: 5,
     justifyContent: 'center',
@@ -1464,8 +1463,8 @@ const styles = StyleSheet.create({
     bottom: -7,
     right: -7,
     backgroundColor: '#48AA09',
-    height: 40,
-    width: 40,
+    height: 30,
+    width: 30,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -1484,8 +1483,8 @@ const styles = StyleSheet.create({
   },
   multipleChoiceImage: {
     alignSelf: 'center',
-    height: 110,
-    width: 110,
+    height: 85,
+    width: 85,
     borderColor: '#ffffff',
     borderWidth: 3,
     borderRadius: 10
