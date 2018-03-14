@@ -304,7 +304,7 @@ export default class App extends Component<Props> {
        speechActivityIncorrectAnswer: false,
        speechActivityCheckmark: false,
        speechActivityImage: null,
-       speechActivityRecording: false,
+       speechActivityRecording: true,
        speechActivityProcessing: false,
        speechActivityAudioPath: null,
        speechActivityScore: null,
@@ -1014,14 +1014,14 @@ animateSpeechActivityRecording = (iterations) => {
                       <View>
                         {!this.state.speechActivityCorrectAnswer && !this.state.speechActivityIncorrectAnswer &&
                           <View>
-                           <Image style={styles.speechActivityIcon} source={require('./assets/images/tencent_microphone_sm_6.png')} />
+                           <Image style={styles.speechActivityIcon} source={require('./assets/images/tencent_microphone_sm.png')} />
                           </View>
                         }
                         {!this.state.speechActivityProcessing && this.state.speechActivityCorrectAnswer && !this.state.countdownClock &&
-                          <Image style={styles.speechActivityIcon} source={require('./assets/images/happy_star_6.png')} />
+                          <Image source={require('./assets/images/happy_star_6.png')} />
                         }
                         {!this.state.speechActivityProcessing && this.state.speechActivityIncorrectAnswer && !this.state.countdownClock &&
-                          <Image style={styles.speechActivityIcon} source={require('./assets/images/sad_star_blue_6.png')} />
+                          <Image source={require('./assets/images/sad_star_blue_6.png')} />
                         }
 
                       </View>
@@ -1394,9 +1394,13 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(47, 154, 224)',
     borderWidth: 1
   },
+  speechActivityIcon: {
+    width: 22,
+    height: 35
+  },
   speechActivityRecordingLeftOne: {
     top: 32, 
-    left: 9, 
+    left: 8, 
     backgroundColor: 'rgb(8, 50, 90)', 
     height: 7, 
     width: 2, 
@@ -1404,7 +1408,7 @@ const styles = StyleSheet.create({
   },
   speechActivityRecordingLeftTwo: {
     top: 27, 
-    left: 13, 
+    left: 12, 
     backgroundColor: 'rgb(8, 50, 90)', 
     height: 17, 
     width: 2, 
@@ -1412,7 +1416,7 @@ const styles = StyleSheet.create({
   },
   speechActivityRecordingLeftThree: {
     top: 22, 
-    left: 17, 
+    left: 16, 
     backgroundColor: 'rgb(8, 50, 90)', 
     height: 27, 
     width: 2, 
@@ -1420,7 +1424,7 @@ const styles = StyleSheet.create({
   },
   speechActivityRecordingRightOne: {
     top: 32, 
-    right: 9, 
+    right: 8, 
     backgroundColor: 'rgb(8, 50, 90)', 
     height: 7, 
     width: 2, 
@@ -1428,7 +1432,7 @@ const styles = StyleSheet.create({
   },
   speechActivityRecordingRightTwo: {
     top: 27, 
-    right: 13, 
+    right: 12, 
     backgroundColor: 'rgb(8, 50, 90)', 
     height: 17, 
     width: 2, 
@@ -1436,7 +1440,7 @@ const styles = StyleSheet.create({
   },
   speechActivityRecordingRightThree: {
     top: 22, 
-    right: 17, 
+    right: 16, 
     backgroundColor: 'rgb(8, 50, 90)', 
     height: 27, 
     width: 2, 
