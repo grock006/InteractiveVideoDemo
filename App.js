@@ -13,14 +13,14 @@ import {
   Easing
 } from 'react-native';
 import Video from 'react-native-video';
-import videoSRC from './assets/videos/video_031218.mp4'
+import videoSRC from './assets/videos/video_031318.mp4'
 import Orientation from 'react-native-orientation';
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
 import Sound from 'react-native-sound';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
-console.log('DEVICE_WIDTH', DEVICE_WIDTH, 'DEVICE_HEIGHT', DEVICE_HEIGHT)
+
 const mockAPI = [
   {
     activityId: 1,
@@ -31,12 +31,12 @@ const mockAPI = [
     interactiveTargetImageStart: 12,//time to display activity target image or images
     interactiveButtonStart: 12,//time to display interactive buttons, non-clickable, could also be microphone
     greenButtonHighlightStart: 15, //time to display green button highlight
-    redButtonHighlightStart: 17,//time to display red button highlight
-    interactivityStart: 18,//time to allow user interactivity, start countdown clock 
-    countdownClockStart: 18,//time to display clock countdown, should be same as interactivityStart
+    redButtonHighlightStart: 16,//time to display red button highlight
+    interactivityStart: 17,//time to allow user interactivity, start countdown clock 
+    countdownClockStart: 17,//time to display clock countdown, should be same as interactivityStart
     interactivityDuration: 3,//total time for user interactivity, can use instead of countdown duration
-    highlightCorrectAnswerStart: 24,//time to highlight correct answer
-    highlightCorrectAnswerDuration: 1,//duration to highlight correct answer
+    highlightCorrectAnswerStart: 23,//time to highlight correct answer
+    highlightCorrectAnswerDuration: 2,//duration to highlight correct answer
     activityEnd: 25,//time to end all activity screens
     activityImages: require('./assets/images/word_play/eyes.png'), //image assets, target images, interactive icons, etc.
     correctAnswer: 'green' //correct answer to the activity question//
@@ -49,14 +49,14 @@ const mockAPI = [
     interactiveScreenStart: 26, 
     interactiveTargetImageStart: 26, 
     interactiveButtonStart: 26, 
-    greenButtonHighlightStart: 29, 
-    redButtonHighlightStart: 30, 
-    interactivityStart: 30, 
-    countdownClockStart: 30, 
+    greenButtonHighlightStart: 28, 
+    redButtonHighlightStart: 29, 
+    interactivityStart: 29, 
+    countdownClockStart: 29, 
     interactivityDuration: 3,
-    highlightCorrectAnswerStart: 36,
+    highlightCorrectAnswerStart: 35,
     highlightCorrectAnswerDuration: 1,
-    activityEnd: 37,
+    activityEnd: 36,
     activityImages: require('./assets/images/word_play/fingers.png'),
     correctAnswer: 'red'
   },
@@ -74,7 +74,7 @@ const mockAPI = [
     interactivityAnimationDuration: 3,
     highlightCorrectAnswerStart: 56,
     highlightCorrectAnswerDuration: 1,
-    activityEnd: 58,
+    activityEnd: 57,
     activityImages: require('./assets/images/word_play/nose.png'),
     correctAnswer: 'nose',
     pcmFileName: 'nose'
@@ -83,17 +83,17 @@ const mockAPI = [
     activityId: 4,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 58,
-    interactiveScreenStart: 58,
-    interactiveTargetImageStart: 58,
-    interactiveButtonStart: 58,
-    interactivityStart: 61,
-    countdownClockStart: 61,
+    activityStart: 57,
+    interactiveScreenStart: 57,
+    interactiveTargetImageStart: 57,
+    interactiveButtonStart: 57,
+    interactivityStart: 60,
+    countdownClockStart: 60,
     interactivityDuration: 3,
     interactivityAnimationDuration: 3,
-    highlightCorrectAnswerStart: 66,
+    highlightCorrectAnswerStart: 65,
     highlightCorrectAnswerDuration: 1,
-    activityEnd: 67,
+    activityEnd: 66,
     activityImages: require('./assets/images/word_play/ear.png'),
     correctAnswer: 'ears',
     pcmFileName: 'ears'
@@ -102,17 +102,17 @@ const mockAPI = [
     activityId: 5,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 68,
-    interactiveScreenStart: 68,
-    interactiveTargetImageStart: 68,
-    interactiveButtonStart: 68,
-    interactivityStart: 70,
-    countdownClockStart: 70,
+    activityStart: 67,
+    interactiveScreenStart: 67,
+    interactiveTargetImageStart: 67,
+    interactiveButtonStart: 67,
+    interactivityStart: 69,
+    countdownClockStart: 69,
     interactivityDuration: 3,
     interactivityAnimationDuration: 3,
-    highlightCorrectAnswerStart: 76,
+    highlightCorrectAnswerStart: 75,
     highlightCorrectAnswerDuration: 1,
-    activityEnd: 77, 
+    activityEnd: 76, 
     activityImages: require('./assets/images/word_play/finger.png'),
     correctAnswer: 'fingers',
     pcmFileName: 'fingers'
@@ -121,11 +121,11 @@ const mockAPI = [
     activityId: 6,
     activityType: 'multipleChoice',
     interactive: true,
-    activityStart: 85, 
-    interactiveScreenStart: 85, 
-    interactiveTargetImageStart: 85, 
-    interactivityStart: 86,
-    countdownClockStart: 86,
+    activityStart: 84, 
+    interactiveScreenStart: 84, 
+    interactiveTargetImageStart: 84, 
+    interactivityStart: 85,
+    countdownClockStart: 85,
     interactivityDuration: 3,
     highlightCorrectAnswerStart: 91, 
     highlightCorrectAnswerDuration: 1,
@@ -145,12 +145,12 @@ const mockAPI = [
     activityStart: 93, 
     interactiveScreenStart: 93, 
     interactiveTargetImageStart: 93, 
-    interactivityStart: 95,
-    countdownClockStart: 95,
+    interactivityStart: 94,
+    countdownClockStart: 94,
     interactivityDuration: 3,
-    highlightCorrectAnswerStart: 101, 
+    highlightCorrectAnswerStart: 100, 
     highlightCorrectAnswerDuration: 2,
-    activityEnd: 103,
+    activityEnd: 102,
     activityOptions: [
       {id: 1, image: require('./assets/images/word_play/body.png')},
       {id: 2, image: require('./assets/images/word_play/finger.png')},
@@ -163,15 +163,15 @@ const mockAPI = [
     activityId: 8,
     activityType: 'multipleChoice',
     interactive: true,
-    activityStart: 104, 
-    interactiveScreenStart: 104, 
-    interactiveTargetImageStart: 104, 
-    interactivityStart: 105,
-    countdownClockStart: 105,
+    activityStart: 103, 
+    interactiveScreenStart: 103, 
+    interactiveTargetImageStart: 103, 
+    interactivityStart: 104,
+    countdownClockStart: 104,
     interactivityDuration: 3,
-    highlightCorrectAnswerStart: 111, 
+    highlightCorrectAnswerStart: 110, 
     highlightCorrectAnswerDuration: 1,
-    activityEnd: 112,
+    activityEnd: 111,
     activityOptions: [
       {id: 1, image: require('./assets/images/word_play/ear.png')},
       {id: 2, image: require('./assets/images/word_play/foot.png')},
@@ -184,12 +184,12 @@ const mockAPI = [
     activityId: 9,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 119, 
-    interactiveScreenStart: 119, 
-    interactiveTargetImageStart: 119, 
-    interactiveButtonStart: 119, 
-    interactivityStart: 121, 
-    countdownClockStart: 121, 
+    activityStart: 118, 
+    interactiveScreenStart: 118, 
+    interactiveTargetImageStart: 118, 
+    interactiveButtonStart: 118, 
+    interactivityStart: 120, 
+    countdownClockStart: 120, 
     interactivityDuration: 3, 
     interactivityAnimationDuration: 3, 
     highlightCorrectAnswerStart: 130,
@@ -203,17 +203,17 @@ const mockAPI = [
     activityId: 10,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 132, 
-    interactiveScreenStart: 132, 
-    interactiveTargetImageStart: 132, 
-    interactiveButtonStart: 132, 
+    activityStart: 131, 
+    interactiveScreenStart: 131, 
+    interactiveTargetImageStart: 131, 
+    interactiveButtonStart: 131, 
     interactivityStart: 133, 
     countdownClockStart: 133, 
     interactivityDuration: 3, 
     interactivityAnimationDuration: 3, 
-    highlightCorrectAnswerStart: 142,
+    highlightCorrectAnswerStart: 141,
     highlightCorrectAnswerDuration: 1,
-    activityEnd: 143,
+    activityEnd: 142,
     activityImages: require('./assets/images/word_play/mouth.png'),
     correctAnswer: 'mouth',
     pcmFileName: 'mouth'
@@ -222,17 +222,17 @@ const mockAPI = [
     activityId: 11,
     activityType: 'speechActivity',
     interactive: true,
-    activityStart: 144, 
-    interactiveScreenStart: 144, 
-    interactiveTargetImageStart: 144, 
-    interactiveButtonStart: 144, 
+    activityStart: 143, 
+    interactiveScreenStart: 143, 
+    interactiveTargetImageStart: 143, 
+    interactiveButtonStart: 143, 
     interactivityStart: 145, 
     countdownClockStart: 145, 
     interactivityDuration: 3, 
     interactivityAnimationDuration: 3, 
     highlightCorrectAnswerStart: 154,
-    highlightCorrectAnswerDuration: 2,
-    activityEnd: 156,
+    highlightCorrectAnswerDuration: 1,
+    activityEnd: 155,
     activityImages: require('./assets/images/word_play/toe.png'),
     correctAnswer: 'toe',
     pcmFileName: 'toe'
@@ -246,15 +246,16 @@ const mockAPI = [
     resultsScreenEnd: 164,
     resultsScreenOptions: [
       {id: 1, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/eyes.png')},
-      {id: 2, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/fingers.png')},
       {id: 3, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/nose.png')},
-      {id: 4, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/ear.png')},
-      {id: 5, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/finger.png')},
       {id: 6, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/foot.png')},
+      {id: 9, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/body.png')},      
+      {id: 2, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/fingers.png')},
+      {id: 4, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/ear.png')},
       {id: 7, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/feet.png')},
-      {id: 8, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/knee.png')},
-      {id: 9, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/body.png')},
       {id: 10, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/mouth.png')},
+      {id: 12, isEmpty: true},  
+      {id: 5, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/finger.png')},      
+      {id: 8, isSpeechActivity: false, answerCorrect: null, image:require('./assets/images/word_play/knee.png')},      
       {id: 11, isSpeechActivity: true, answerCorrect: null, image:require('./assets/images/word_play/toe.png')}
     ]
   }
@@ -1070,7 +1071,9 @@ animateSpeechActivityRecording = (iterations) => {
             <View style={styles.resultsScreen}>
               {this.state.resultsScreenOptions.map((result, index) => {
                 return(
-                  <View key={index} style={styles.resultsScreenImageContainer}>
+                  <View key={index} style={[styles.resultsScreenImageContainer,
+                    result.isEmpty ? styles.resultsScreenIsEmpty : {}
+                    ]}>
                     {!result.isSpeechActivity &&
                       <Image style={styles.resultsScreenImage} source={result.image} />
                     }
@@ -1259,6 +1262,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  resultsScreenIsEmpty: {
+    backgroundColor: 'transparent',
+    borderColor: 'transparent'
+  },
   interactiveContainer: {
     flex: 1,
     alignItems: 'center',
@@ -1266,7 +1273,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
     top: 55,
     right: 15, 
-    backgroundColor: 'rgba(36, 102, 215, 0.2)',
+    backgroundColor: 'rgba(205, 236, 253, 0.6)',
     height: 300,
     width: 300,
     borderWidth: 2,
