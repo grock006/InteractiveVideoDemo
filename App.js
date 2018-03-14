@@ -192,9 +192,9 @@ const mockAPI = [
     countdownClockStart: 120, 
     interactivityDuration: 3, 
     interactivityAnimationDuration: 3, 
-    highlightCorrectAnswerStart: 129,
+    highlightCorrectAnswerStart: 130,
     highlightCorrectAnswerDuration: 1,
-    activityEnd: 130,
+    activityEnd: 131,
     activityImages: require('./assets/images/word_play/body.png'),
     correctAnswer: 'body',
     pcmFileName: 'body'
@@ -286,7 +286,7 @@ export default class App extends Component<Props> {
        countdownClock: false,
        countdownClockSeconds: null,
        isVideoLoaded: false,
-       isPaused: this.f,
+       isPaused: this.t,
        isMuted: this.f,
        interactiveContainer: false,
        trueFalse: false,
@@ -744,6 +744,7 @@ animateSpeechActivityRecording = (iterations) => {
     this.setState({
       isVideoLoaded: true
     });
+    this.player.seek(55);
   };
 
   _onPressPlay = () => {
@@ -1154,7 +1155,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     height: 25,
-    //width: 20
   },
   ticketCounterIcon: {
     width: 26,
@@ -1203,25 +1203,25 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'rgb(60, 123, 218)',
     borderRadius: 10,
-    marginTop: 40,
+    marginTop: 27,
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignSelf: 'center',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 5,
-    paddingRight: 10,
-    paddingLeft: 10
+    paddingTop: 4,
+    paddingRight: 6,
+    paddingLeft: 6
   },
   resultsScreenImageContainer: {
-    height: 77,
-    width: 77,
+    height: 80,
+    width: 80,
     borderColor: 'rgb(36, 102, 215)',
     borderWidth: 2,
     borderRadius: 10,
-    marginTop: 3,
-    marginRight: 3,
-    marginBottom: 3,
+    marginTop: 2,
+    marginRight: 2,
+    marginBottom: 2,
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     position: 'relative'
@@ -1256,10 +1256,10 @@ const styles = StyleSheet.create({
   },
   resultsScreenTicketIconContainer: {
     position: 'absolute',
-    top: 5,
-    right: -10,
-    width: 25,
-    height: 25,
+    top: 10,
+    right: 3,
+    width: 5,
+    height: 5,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -1311,7 +1311,7 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     backgroundColor: '#C30016',
-    borderRadius: 50,
+    borderRadius: 60,
     zIndex: 5,
     position: 'absolute',
     justifyContent: 'center',
@@ -1323,7 +1323,7 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     backgroundColor: '#48AA09',
-    borderRadius: 50,
+    borderRadius: 60,
     zIndex: 5,
     position: 'absolute',
     justifyContent: 'center',
@@ -1333,11 +1333,11 @@ const styles = StyleSheet.create({
   },
   trueFalseHighlight: {
     borderColor: 'transparent',
-    height: 70,
-    width: 70,
+    height: 75,
+    width: 75,
     backgroundColor: 'transparent',
     borderRadius: 100,
-    borderWidth: 5,
+    borderWidth: 10,
     zIndex: 2,
     justifyContent: 'center',
     alignItems: 'center'
@@ -1354,9 +1354,9 @@ const styles = StyleSheet.create({
     width: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 7,
     borderColor: '#ffffff',
-    borderWidth: 3
+    borderWidth: 2
   },
   checkmarkIcon: {
     marginTop: -3
@@ -1472,21 +1472,21 @@ const styles = StyleSheet.create({
     height: 95,
     width: 95,
     borderColor: '#ffffff',
-    borderWidth: 3,
+    borderWidth: 2,
     borderRadius: 10
   },
   multipleChoiceCheckmarkContainer: {
     position: 'absolute',
-    bottom: -7,
-    right: -7,
+    bottom: -6,
+    right: -6,
     backgroundColor: '#48AA09',
     height: 30,
     width: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 7,
     borderColor: '#ffffff',
-    borderWidth: 3
+    borderWidth: 2
   },
   multipleChoiceImageContainerSelected: {
     borderWidth: 10, 
