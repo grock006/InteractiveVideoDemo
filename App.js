@@ -265,7 +265,7 @@ const soundEffects = {
   click: require('./assets/audio/click.wav'),
   correctAnswer: require('./assets/audio/correct_answer.wav'),
   incorrectAnswer: require('./assets/audio/incorrect_answer.wav'),
-  countdownTimerEnd: require('./assets/audio/countdown_timer_end_new.wav'),
+  countdownTimerEnd: require('./assets/audio/countdown_timer_end.wav'),
   interactiveScreenSlideIn: require('./assets/audio/interactive_screen_slide_in.wav')
 }
 
@@ -286,7 +286,7 @@ export default class App extends Component<Props> {
        countdownClock: false,
        countdownClockSeconds: null,
        isVideoLoaded: false,
-       isPaused: this.f,
+       isPaused: this.t,
        isMuted: this.f,
        interactiveContainer: false,
        trueFalse: false,
@@ -349,19 +349,8 @@ export default class App extends Component<Props> {
         resultsScreen: true,
         resultsScreenOptions: resultsScreenOptions
       });
-
-      // this.clearResultsScreenTimeout = setTimeout(
-      //   () => {
-      //     this.setState({
-      //       resultsScreen: false,
-      //       resultsScreenOptions: []
-      //     });
-      //     clearTimeout(this.clearResultsScreenTimeout);
-      //   }, mockAPI.resultsScreenDuration * 1000
-      // );
     }
-  }
-
+  };
 
   _checkFinalScoring = (resultsScreenOptions) => {
     let resultsScreenOptionsArr = resultsScreenOptions;
@@ -376,7 +365,7 @@ export default class App extends Component<Props> {
       });
     });
     return resultsScreenOptionsArr;
-  }
+  };
 
   _setResultsScreenFinalScore = (activityId, activityType, answerCorrect) => {
     let resultsScreenFinalObj = {id: activityId, activityType: activityType, answerCorrect: answerCorrect}
@@ -384,8 +373,8 @@ export default class App extends Component<Props> {
     resultsScreenArr.push(resultsScreenFinalObj);
     this.setState({
       resultsScreenFinalScores: resultsScreenArr
-    })
-  }
+    });
+  };
 
   _setActivityEnd = (activityType) => {
     if (activityType === 'trueFalse') {
@@ -709,7 +698,9 @@ animateSpeechActivityRecording = (iterations) => {
     this.setState({
       speechActivityProcessing: true
     });
+
     this.animateSpeechActivityProcessing(5);
+    
     fetch(apiUrl, {
       method: 'POST',
       headers: {
@@ -720,13 +711,11 @@ animateSpeechActivityRecording = (iterations) => {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log('responseJson good', responseJson)
       this.setState({
         speechActivityScore: responseJson.score,
       })
     })
     .catch((error) => {
-      console.log('responseJson error', error)
       this.setState({
         speechActivityScore: 0,
       })
@@ -836,12 +825,12 @@ animateSpeechActivityRecording = (iterations) => {
         
         // greenButtonHighlightStart: 9, //time to display green button highlight
         if (currentTime === mockAPI.greenButtonHighlightStart ) {
-          this._highlightTrueFalse('green')
+          this._highlightTrueFalse('green');
         }
 
         // redButtonHighlightStart: 8, //time to display red button highlight
         if (currentTime === mockAPI.redButtonHighlightStart ) {
-          this._highlightTrueFalse('red')
+          this._highlightTrueFalse('red');
         }
         
         // interactivityStart: 10, //time to allow user interactivity, start countdown clock 
@@ -873,7 +862,7 @@ animateSpeechActivityRecording = (iterations) => {
         if(currentTime === mockAPI.resultsScreenEnd) {
           this.setState({
             isPaused: true
-          })
+          });
         }
 
       });
@@ -892,23 +881,6 @@ animateSpeechActivityRecording = (iterations) => {
               <Icon style={{color: '#FFFFFF'}} name="ios-refresh-circle" size={30} color="#000000" />
             </TouchableOpacity>
           </View>
-        
-        {false &&
-          <View style={styles.playPauseContainer}>
-            {this.state.isPaused && this.state.isVideoLoaded &&
-              <TouchableOpacity 
-                onPress={() => this._onPressPlay()}>
-                <Icon name="ios-play-outline" size={40} color="#FFFFFF" />
-              </TouchableOpacity>
-            }
-            {!this.state.isPaused &&
-              <TouchableOpacity 
-                onPress={() => this._onPressPause()}>
-                <Icon style={{color: '#FFFFFF'}} name="ios-pause-outline" size={40} color="#000000" />
-              </TouchableOpacity>
-            }
-          </View>
-          }
 
           <Video
             ref={this._onVideoMount}
@@ -976,11 +948,7 @@ animateSpeechActivityRecording = (iterations) => {
                     }
                   </TouchableOpacity>
                   </View>
-
               </View>}
-
-
-
 
 
               {this.state.speechActivity && 
@@ -999,9 +967,10 @@ animateSpeechActivityRecording = (iterations) => {
                     <View style={styles.speechActivityIconContainer}>
 
                     {this.state.speechActivityProcessing && 
-                      <Animated.View style={
-                        {borderColor: '#ffffff', borderWidth: 4, position: 'absolute', height: 77, width: 77, borderRadius: 100, opacity: this.state.speechActivityProcessingAnim}
-                      }></Animated.View>
+                      <Animated.View style={[
+                        {opacity: this.state.speechActivityProcessingAnim},
+                        styles.speechActivityProcessing
+                      ]}></Animated.View>
                     }
 
                     {this.state.speechActivityRecording && this.state.countdownClock &&
@@ -1061,7 +1030,6 @@ animateSpeechActivityRecording = (iterations) => {
                     </TouchableOpacity>
                     )
                 })}
-      
                 </View>}         
             </View>}
 
@@ -1076,9 +1044,7 @@ animateSpeechActivityRecording = (iterations) => {
                       <Image style={styles.resultsScreenImage} source={result.image} />
                     }
                     {result.isSpeechActivity && 
-                      <View style={styles.resultsScreenSpeechActivityContainer
-
-                      }>
+                      <View style={styles.resultsScreenSpeechActivityContainer}>
                         <Image style={styles.resultsScreenSpeechActivityImage} source={result.image} />
                         <View style={styles.resultsScreenSpeechActivityIconContainer}>
                           <Image style={styles.resultsScreenSpeechActivityIcon} source={require('./assets/images/tencent_microphone_sm.png')} />
@@ -1093,7 +1059,6 @@ animateSpeechActivityRecording = (iterations) => {
                   </View>
                 )
               })}
-
             </View>
           }
         
@@ -1123,12 +1088,6 @@ const styles = StyleSheet.create({
     left: 0
   },
   reloadContainer: {
-    position: 'absolute',
-    top: 10,
-    left: 15,
-    zIndex: 10
-  },
-  playPauseContainer: {
     position: 'absolute',
     top: 10,
     left: 15,
@@ -1397,6 +1356,14 @@ const styles = StyleSheet.create({
   speechActivityIcon: {
     width: 22,
     height: 35
+  },
+  speechActivityProcessing: {
+    borderColor: '#ffffff', 
+    borderWidth: 4, 
+    position: 'absolute', 
+    height: 77, 
+    width: 77, 
+    borderRadius: 100
   },
   speechActivityRecordingLeftOne: {
     top: 32, 
