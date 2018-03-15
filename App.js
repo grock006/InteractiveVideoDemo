@@ -347,16 +347,6 @@ export default class App extends Component<Props> {
         resultsScreen: true,
         resultsScreenOptions: resultsScreenOptions
       });
-
-      // this.clearResultsScreenTimeout = setTimeout(
-      //   () => {
-      //     this.setState({
-      //       resultsScreen: false,
-      //       resultsScreenOptions: []
-      //     });
-      //     clearTimeout(this.clearResultsScreenTimeout);
-      //   }, mockAPI.resultsScreenDuration * 1000
-      // );
     }
   }
 
@@ -718,13 +708,11 @@ animateSpeechActivityRecording = (iterations) => {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log('responseJson good', responseJson)
       this.setState({
         speechActivityScore: responseJson.score,
       })
     })
     .catch((error) => {
-      console.log('responseJson error', error)
       this.setState({
         speechActivityScore: 0,
       })
@@ -814,9 +802,7 @@ animateSpeechActivityRecording = (iterations) => {
 
   _playInteractiveSequence = (status) => {
     if (status && mockAPI) {
-      console.log('status.currentTime', status.currentTime);
       let currentTime = Math.round(status.currentTime);
-      console.log('currentTime', currentTime);
       mockAPI.forEach((mockAPI) => {  
         // activityStart: 3, //time to start interactive segment within overall video, in seconds
         // interactiveScreenStart: 3, //time to display interactive screen
@@ -892,23 +878,6 @@ animateSpeechActivityRecording = (iterations) => {
               <Icon style={{color: '#FFFFFF'}} name="ios-refresh-circle" size={40} color="#000000" />
             </TouchableOpacity>
           </View>
-        
-        {false &&
-          <View style={styles.playPauseContainer}>
-            {this.state.isPaused && this.state.isVideoLoaded &&
-              <TouchableOpacity 
-                onPress={() => this._onPressPlay()}>
-                <Icon name="ios-play-outline" size={40} color="#FFFFFF" />
-              </TouchableOpacity>
-            }
-            {!this.state.isPaused &&
-              <TouchableOpacity 
-                onPress={() => this._onPressPause()}>
-                <Icon style={{color: '#FFFFFF'}} name="ios-pause-outline" size={40} color="#000000" />
-              </TouchableOpacity>
-            }
-          </View>
-          }
 
           <Video
             ref={this._onVideoMount}
@@ -925,14 +894,14 @@ animateSpeechActivityRecording = (iterations) => {
 
           <View style={styles.ticketContainer}>
             <Image style={styles.ticketCounterIcon} source={require('./assets/images/tickets.png')} />
-            <Text style={styles.ticketCounterPlus}>{ this.state.ticketCounter > 0 ? '+' : ''}</Text>
-            <Text style={styles.ticketCounter}>{this.state.ticketCounter}</Text>
+            <Text allowFontScaling={false} style={styles.ticketCounterPlus}>{ this.state.ticketCounter > 0 ? '+' : ''}</Text>
+            <Text allowFontScaling={false} style={styles.ticketCounter}>{this.state.ticketCounter}</Text>
           </View>
 
             {this.state.countdownClock && 
               <View style={styles.countdownClockContainer}>
                 <Image style={styles.countdownClockIcon} source={require('./assets/images/timer_white.png')} />
-                <Text style={styles.countdownClockSeconds}>{this.state.countdownClockSeconds}</Text>
+                <Text allowFontScaling={false} style={styles.countdownClockSeconds}>{this.state.countdownClockSeconds}</Text>
               </View>
             }
           
@@ -1121,12 +1090,6 @@ const styles = StyleSheet.create({
     left: 0
   },
   reloadContainer: {
-    position: 'absolute',
-    top: 10,
-    left: 15,
-    zIndex: 10
-  },
-  playPauseContainer: {
     position: 'absolute',
     top: 10,
     left: 15,
