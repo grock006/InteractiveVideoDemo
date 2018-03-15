@@ -279,15 +279,13 @@ type Props = {};
 export default class App extends Component<Props> {
   constructor(props) {
     super(props);
-     this.t = true;
-     this.f = false;
      this.state = {
        ticketCounter: 0,
        countdownClock: false,
        countdownClockSeconds: 0,
        isVideoLoaded: false,
-       isPaused: this.f,
-       isMuted: this.f,
+       isPaused: false,
+       isMuted: false,
        interactiveContainer: false,
        trueFalse: false,
        trueFalseImageContainer: false,
